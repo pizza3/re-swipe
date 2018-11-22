@@ -1,0 +1,31 @@
+{
+    "name": "re-swipe",
+    "version": "1.0.0",
+    "description": "",
+    "main": "build/index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "lib": "babel src/lib -d build --copy-files",
+        "lib:watch": "babel src/lib -w -d build --copy-files"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/pizza3/re-swipe.git"
+    },
+    "author": "",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/pizza3/re-swipe/issues"
+    },
+    "homepage": "https://github.com/pizza3/re-swipe#readme",
+    "devDependencies": {
+        "@babel/cli": "^7.1.5",
+        "@babel/core": "^7.1.6",
+        "@babel/plugin-proposal-class-properties": "^7.1.0",
+        "@babel/preset-env": "^7.1.6",
+        "@babel/preset-react": "^7.0.0",
+        "babel-plugin-transform-class-properties": "^6.24.1",
+        "react": "^16.6.3",
+        "react-dom": "^16.6.3"
+    }
+}
