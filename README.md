@@ -32,7 +32,7 @@ class App extends Component{
 
 ## API
 
-`ReContainer`
+`<ReContainer>`
 
 | Prop          | Description   | Type  | Default Value |
 | ------------- |:-------------|:-----:|:-----|
