@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 
-
 class Container extends Component{
     constructor(props){
         super(props);
@@ -59,8 +58,8 @@ class Container extends Component{
     updateCard(){
         const {pos,current,mass,k,damping} = this.state;
         this.force={
-            x:-k * (pos.x - 0),
-            y:-k * (pos.y - 0)
+            x:-k * (pos.x - 0.5),
+            y:-k * (pos.y - 0.5)
         };
         this.acc={
             x:this.force.x/mass,
