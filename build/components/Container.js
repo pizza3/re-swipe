@@ -51,21 +51,21 @@ function (_Component) {
       },
       k: 0.2,
       mass: 0.7,
-      damping: 0.8
+      damping: 0.8,
+      arr: []
     };
     _this.handleDown = _this.handleDown.bind(_assertThisInitialized(_assertThisInitialized(_this)));
     _this.handleUp = _this.handleUp.bind(_assertThisInitialized(_assertThisInitialized(_this)));
     _this.handleMove = _this.handleMove.bind(_assertThisInitialized(_assertThisInitialized(_this)));
     _this.animate = _this.animate.bind(_assertThisInitialized(_assertThisInitialized(_this)));
     _this.updateCard = _this.updateCard.bind(_assertThisInitialized(_assertThisInitialized(_this)));
+    _this.renderChildren = _this.renderChildren.bind(_assertThisInitialized(_assertThisInitialized(_this)));
     return _this;
   }
 
   _createClass(Container, [{
     key: "componentDidMount",
     value: function componentDidMount() {
-      var _this2 = this;
-
       console.log('mounted');
       this.force = {
         x: 0,
@@ -79,14 +79,14 @@ function (_Component) {
         x: 0,
         y: 0
       };
-      window.addEventListener('mousemove', function (e) {
-        _this2.handleMove(e);
-      });
-      this.animate();
+      this.elemenTrack = [];
+      this.renderChildren(); // window.addEventListener('mousemove',(e)=>{this.handleMove(e)})
+      // this.animate();
     }
   }, {
     key: "handleDown",
     value: function handleDown(e, val) {
+      e.preventDefault();
       console.log(val + 'card');
       this.setState({
         move: true,
@@ -99,7 +99,8 @@ function (_Component) {
     }
   }, {
     key: "handleUp",
-    value: function handleUp() {
+    value: function handleUp(e) {
+      e.preventDefault();
       this.setState({
         move: false
       });
@@ -107,6 +108,7 @@ function (_Component) {
   }, {
     key: "handleMove",
     value: function handleMove(e) {
+      e.preventDefault();
       var clickPos = this.state.clickPos;
 
       if (this.state.move) {
@@ -128,8 +130,8 @@ function (_Component) {
           k = _this$state.k,
           damping = _this$state.damping;
       this.force = {
-        x: -k * (pos.x - 0),
-        y: -k * (pos.y - 0)
+        x: -k * (pos.x - 0.5),
+        y: -k * (pos.y - 0.5)
       };
       this.acc = {
         x: this.force.x / mass,
@@ -165,22 +167,37 @@ function (_Component) {
   }, {
     key: "renderChildren",
     value: function renderChildren() {
-      var _this3 = this;
+      var _this2 = this;
 
       var children = this.props.children;
-      return _react.default.Children.toArray(children).map(function (child, i) {
-        return _react.default.cloneElement(child, {
+      var arr = [];
+
+      _react.default.Children.toArray(children).map(function (child, i) {
+        arr.push(_react.default.cloneElement(child, {
           key: i,
           num: i,
-          handleDown: _this3.handleDown,
-          handleUp: _this3.handleUp
-        });
+          handleDown: _this2.handleDown,
+          handleUp: _this2.handleUp
+        }));
+      }); // console.log(arr);
+
+
+      this.setState({
+        arr: arr
       });
     }
   }, {
     key: "render",
     value: function render() {
-      return _react.default.createElement("div", null, this.renderChildren());
+      var style = {
+        position: 'relative',
+        width: '100%',
+        height: '100%',
+        overflow: 'hidden'
+      };
+      return _react.default.createElement("div", {
+        style: style
+      }, this.state.arr);
     }
   }]);
 

@@ -10,13 +10,15 @@ class Container extends Component{
             pos:{x:0,y:0},
             k:0.2,
             mass:0.7,
-            damping:0.8
+            damping:0.8,
+            arr:[]
         }
         this.handleDown = this.handleDown.bind(this);
         this.handleUp = this.handleUp.bind(this);
         this.handleMove = this.handleMove.bind(this);
         this.animate = this.animate.bind(this);
         this.updateCard = this.updateCard.bind(this);
+        this.renderChildren = this.renderChildren.bind(this);
     }
 
     componentDidMount(){
@@ -24,11 +26,14 @@ class Container extends Component{
         this.force={x:0,y:0};
         this.acc={x:0,y:0};
         this.vel={x:0,y:0};
-        window.addEventListener('mousemove',(e)=>{this.handleMove(e)})
-        this.animate();
+        this.elemenTrack=[];
+        this.renderChildren();
+        // window.addEventListener('mousemove',(e)=>{this.handleMove(e)})
+        // this.animate();
     }
 
     handleDown(e,val){
+        e.preventDefault();
         console.log(val+'card')
         this.setState({
             move:true,
@@ -37,13 +42,15 @@ class Container extends Component{
         })
     }
 
-    handleUp(){
+    handleUp(e){
+        e.preventDefault();
         this.setState({
             move:false
         })
     }
 
     handleMove(e){
+        e.preventDefault();
         let {clickPos} = this.state;
         if(this.state.move){
             this.setState({
@@ -92,20 +99,32 @@ class Container extends Component{
 
     renderChildren(){
         const {children} = this.props;
-        return React.Children.toArray(children).map((child, i) => {
-            return React.cloneElement(child, {
+        let arr = [];
+        React.Children.toArray(children).map((child, i) => {
+            arr.push(React.cloneElement(child, {
                 key: i,
                 num: i,
                 handleDown:this.handleDown,
                 handleUp:this.handleUp
-            });
+            }))
         });
+        // console.log(arr);
+        this.setState({
+            arr:arr
+        })
     }
 
     render(){
+        let style = {
+            position:'relative',
+            width:'100%',
+            height:'100%',
+            overflow:'hidden'
+        }
         return(
-            <div>
-                {this.renderChildren()}
+            <div style={style}>
+                {/* {this.renderChildren()} */}
+                {this.state.arr}
             </div>
         )
     }
