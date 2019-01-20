@@ -5,11 +5,11 @@
 re-swipe is a card swipe concept as seen on applications such as tinder, which provides the card like component
 and the track of accept and reject state of each and every card.
 
-## Usage
+## Basic Usage
 
 ```js
 import React, { Component } from "react";
-import ReContainer, { ReCard } from "re-swipe";
+import Container, { Card } from "re-swipe";
 
 class App extends Component{
     constructor(props){
@@ -21,9 +21,9 @@ class App extends Component{
 
     render(){
         return(
-            <ReContainer>
-                <ReCard></ReCard>
-            </ReContainer>
+            <Container>
+                <Card></Card>
+            </Container>
         )
     }
 }
@@ -32,11 +32,25 @@ class App extends Component{
 
 ## API
 
-`<ReContainer>`
+`<Container>`
+
+| Prop          | Description   | Type  | Default Value | Expected Values |
+| ------------- |:-------------|:-----:|:-----|:-----|
+| mass          | Provide the mass for animation.            | Float | 0.7 | 0.1 - 1 |
+| damping       | Provide the damping for animation.         | Float | 0.8 | 0.1 - 2|
+| width         | The width for parent container  | Int      | 300 | -  | 
+| height        | The height for parent container | Int      | 500 | -  |
+| offset        | The offset trigger areas on left and right | Int | 10 | 5 - 40 |
+
+`<Card>`
 
 | Prop          | Description   | Type  | Default Value |
 | ------------- |:-------------|:-----:|:-----|
-| mass          | Provide the mass for animation.        | Float | 0.7 |
-| damping       | Provide the damping for animation.     | Float | 0.8 |
-| width         | Proved the width for parent container  | Int   | 300 |
-| height        | Proved the height for parent container | Int   | 500 |
+| width         | Provide the width of the child component  | Int | 300 |
+| height        | Provide the height of the child component | Int | 400 |
+
+## How does it work
+
+## Demo
+
+## License

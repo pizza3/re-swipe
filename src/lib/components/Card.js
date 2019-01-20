@@ -295,8 +295,8 @@ class Card extends Component{
             marginTop: 'auto',
             marginBottom:'auto',
 			boxSizing:'border-box',
-			width:width,
-			height:height,
+			width:width+'px',
+			height:height+'px',
 			transform :
 				"translate(" +
 				this.state.Posx +
@@ -309,7 +309,7 @@ class Card extends Component{
 		}
 		
         return(
-				<div id={'re-card'+num} style={style} onMouseDown={this.handleDown}
+				<div style={style} onMouseDown={this.handleDown}
 					onMouseMove={this.handleMove}
 					onMouseUp={this.handleUp}
 					onMouseLeave={this.handleUp}

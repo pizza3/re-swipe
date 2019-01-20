@@ -356,12 +356,11 @@ function (_Component) {
         marginTop: 'auto',
         marginBottom: 'auto',
         boxSizing: 'border-box',
-        width: width,
-        height: height,
+        width: width + 'px',
+        height: height + 'px',
         transform: "translate(" + this.state.Posx + "px" + "," + this.state.Posy + "px) rotate(" + this.state.Posx / 9 + "deg) perspective(800px)"
       };
       return _react.default.createElement("div", {
-        id: 're-card' + num,
         style: style,
         onMouseDown: this.handleDown,
         onMouseMove: this.handleMove,

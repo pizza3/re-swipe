@@ -71,26 +71,50 @@ function (_Component) {
     value: function renderChildren() {
       var _this2 = this;
 
-      var children = this.props.children.slice(0, this.props.children.length);
-      var arr = [];
-      var displayChildren = [];
+      if (_react.default.Children.toArray(this.props.children).length < 4) {
+        var children = this.props.children;
+        var arr = [];
+        var displayChildren = [];
 
-      _react.default.Children.toArray(children).map(function (child, i) {
-        arr.push(_react.default.cloneElement(child, {
-          key: i,
-          num: i,
-          handleDown: _this2.handleDown,
-          handleUp: _this2.handleUp,
-          updateChildren: _this2.updateChildren
-        }));
-      });
+        _react.default.Children.toArray(children).map(function (child, i) {
+          arr.push(_react.default.cloneElement(child, {
+            key: i,
+            num: i,
+            handleDown: _this2.handleDown,
+            handleUp: _this2.handleUp,
+            updateChildren: _this2.updateChildren
+          }));
+        });
 
-      displayChildren = arr.slice(this.props.children.length - this.state.maxElement, this.props.children.length);
-      this.setState({
-        arr: arr,
-        children: this.props.children,
-        displayChildren: displayChildren
-      });
+        displayChildren = arr;
+        this.setState({
+          arr: arr,
+          children: this.props.children,
+          displayChildren: displayChildren
+        });
+      } else {
+        var _children = this.props.children.slice(0, this.props.children.length);
+
+        var _arr = [];
+        var _displayChildren = [];
+
+        _react.default.Children.toArray(_children).map(function (child, i) {
+          _arr.push(_react.default.cloneElement(child, {
+            key: i,
+            num: i,
+            handleDown: _this2.handleDown,
+            handleUp: _this2.handleUp,
+            updateChildren: _this2.updateChildren
+          }));
+        });
+
+        _displayChildren = _arr.slice(this.props.children.length - this.state.maxElement, this.props.children.length);
+        this.setState({
+          arr: _arr,
+          children: this.props.children,
+          displayChildren: _displayChildren
+        });
+      }
     }
   }, {
     key: "updateChildren",
