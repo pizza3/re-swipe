@@ -52,12 +52,6 @@ function (_Component) {
       k: 0.2,
       restX: 0,
       restY: 0,
-      fx: 0,
-      fy: 0,
-      ax: 0,
-      ay: 0,
-      vx: 0.0,
-      vy: 0.0,
       mass: 0.7,
       damping: 0.8
     };
@@ -65,21 +59,33 @@ function (_Component) {
     _this.handleUp = _this.handleUp.bind(_assertThisInitialized(_assertThisInitialized(_this)));
     _this.handleMove = _this.handleMove.bind(_assertThisInitialized(_assertThisInitialized(_this)));
     _this.handleTouchStart = _this.handleTouchStart.bind(_assertThisInitialized(_assertThisInitialized(_this)));
-    _this.handleTouchEnd = _this.handleTouchEnd.bind(_assertThisInitialized(_assertThisInitialized(_this)));
     _this.handleTouchMove = _this.handleTouchMove.bind(_assertThisInitialized(_assertThisInitialized(_this)));
     _this.animate = _this.animate.bind(_assertThisInitialized(_assertThisInitialized(_this)));
     _this.updateCard = _this.updateCard.bind(_assertThisInitialized(_assertThisInitialized(_this)));
+    _this.f = {
+      x: 0,
+      y: 0
+    };
+    _this.a = {
+      x: 0,
+      y: 0
+    };
+    _this.v = {
+      x: 0,
+      y: 0
+    };
     return _this;
   }
 
   _createClass(Card, [{
-    key: "componentDidMount",
-    value: function componentDidMount() {
-      this.animate();
-    }
-  }, {
     key: "handleDown",
     value: function handleDown(e) {
+      if (!this.state.active) {
+        this.animate();
+      }
+
+      e.stopPropagation();
+      e.preventDefault();
       this.setState({
         move: true,
         active: true,
@@ -90,6 +96,12 @@ function (_Component) {
   }, {
     key: "handleTouchStart",
     value: function handleTouchStart(e) {
+      if (!this.state.active) {
+        this.animate();
+      }
+
+      e.stopPropagation();
+      e.preventDefault();
       e.persist();
       this.setState({
         move: true,
@@ -103,20 +115,21 @@ function (_Component) {
     value: function handleMove(e) {
       var _this2 = this;
 
+      e.preventDefault();
+
       if (!this.state.limit) {
         if (this.state.move) {
-          var map_range = function map_range(value, low1, high1, low2, high2) {
-            return low2 + (high2 - low2) * (value - low1) / (high1 - low1);
-          };
-
           var mouseCurrPosX = e.clientX;
           var mouseCurrPosY = e.clientY;
           var Posx = mouseCurrPosX - this.state.mouseStartPosX;
           var Posy = mouseCurrPosY - this.state.mouseStartPosY;
-          var el = document.getElementById("card" + this.props.no);
           var height = window.innerHeight;
           var width = window.innerWidth;
-          var maxX = width - width * 20 / 100;
+
+          var map_range = function map_range(value, low1, high1, low2, high2) {
+            return low2 + (high2 - low2) * (value - low1) / (high1 - low1);
+          };
+
           var mouseRange = mouseCurrPosX;
 
           if (mouseRange < width / 2) {
@@ -178,7 +191,7 @@ function (_Component) {
 
             var _limit = true;
             var _move = false;
-            var _damping2 = 0.06;
+            var _damping2 = 0.08;
             this.setState({
               restX: _restX,
               restY: _restY,
@@ -199,10 +212,6 @@ function (_Component) {
 
       if (!this.state.limit) {
         if (this.state.move) {
-          var map_range = function map_range(value, low1, high1, low2, high2) {
-            return low2 + (high2 - low2) * (value - low1) / (high1 - low1);
-          };
-
           var mouseCurrPosX = e.touches[0].screenX;
           var mouseCurrPosY = e.touches[0].screenY;
           var Posx = mouseCurrPosX - this.state.mouseStartPosX;
@@ -211,6 +220,11 @@ function (_Component) {
           var height = window.innerHeight;
           var width = window.innerWidth;
           var maxX = width - width * 20 / 100;
+
+          var map_range = function map_range(value, low1, high1, low2, high2) {
+            return low2 + (high2 - low2) * (value - low1) / (high1 - low1);
+          };
+
           var mouseRange = mouseCurrPosX;
 
           if (mouseRange < width / 2) {
@@ -292,45 +306,18 @@ function (_Component) {
       });
     }
   }, {
-    key: "handleTouchEnd",
-    value: function handleTouchEnd() {
-      this.setState({
-        move: false
-      });
-    }
-  }, {
     key: "updateCard",
     value: function updateCard() {
-      var _this4 = this;
-
       if (!this.state.move) {
+        this.f.x = -this.state.k * (this.state.Posx - this.state.restX);
+        this.f.y = -this.state.k * (this.state.Posy - this.state.restY);
+        this.a.x = this.f.x / this.state.mass;
+        this.a.y = this.f.y / this.state.mass;
+        this.v.x = this.state.damping * (this.v.x + this.a.x);
+        this.v.y = this.state.damping * (this.v.y + this.a.y);
         this.setState({
-          fx: -this.state.k * (this.state.Posx - this.state.restX),
-          fy: -this.state.k * (this.state.Posy - this.state.restY)
-        }, function () {
-          _this4.setState({
-            ax: _this4.state.fx / _this4.state.mass,
-            ay: _this4.state.fy / _this4.state.mass
-          }, function () {
-            _this4.setState({
-              vx: _this4.state.damping * (_this4.state.vx + _this4.state.ax),
-              vy: _this4.state.damping * (_this4.state.vy + _this4.state.ay)
-            }, function () {
-              // console.log(this.state.vx)
-              if (_this4.state.limit) {
-                if (Math.floor(_this4.state.vx) === 0) {
-                  _this4.setState({
-                    out: true
-                  });
-                }
-              }
-
-              _this4.setState({
-                Posx: _this4.state.Posx + _this4.state.vx,
-                Posy: _this4.state.Posy + _this4.state.vy
-              });
-            });
-          });
+          Posx: this.state.Posx + this.v.x,
+          Posy: this.state.Posy + this.v.y
         });
       }
     }
@@ -341,19 +328,23 @@ function (_Component) {
 
       if (this.state.Posx > window.innerWidth + 400 || this.state.Posx < -window.innerWidth - 400) {
         cancelAnimationFrame(this.animate);
+        this.props.updateChildren();
       } else {
         requestAnimationFrame(this.animate);
       }
 
       if (this.state.active) {
-        el.style.transform = "translate(" + this.state.Posx + "px" + "," + this.state.Posy + "px) rotate(" + this.state.Posx / 9 + "deg) perspective(800px)";
         this.updateCard();
       }
     }
   }, {
     key: "render",
     value: function render() {
-      var num = this.props.num;
+      var _this$props = this.props,
+          num = _this$props.num,
+          children = _this$props.children,
+          width = _this$props.width,
+          height = _this$props.height;
       var style = {
         position: 'absolute',
         left: '0px',
@@ -364,18 +355,12 @@ function (_Component) {
         marginRight: 'auto',
         marginTop: 'auto',
         marginBottom: 'auto',
-        width: '250px',
-        height: '350px',
-        backgroundImage: 'linear-gradient(to top, #00c6fb 0%, #005bea 100%)',
-        color: '#fff',
-        fontFamily: 'sans-serif',
-        borderRadius: '18px',
-        textAlign: 'center',
-        fontWeight: 'bolder',
-        fontSize: '48px',
-        paddingTop: '17%'
+        boxSizing: 'border-box',
+        width: width,
+        height: height,
+        transform: "translate(" + this.state.Posx + "px" + "," + this.state.Posy + "px) rotate(" + this.state.Posx / 9 + "deg) perspective(800px)"
       };
-      return !this.state.out ? _react.default.createElement("div", {
+      return _react.default.createElement("div", {
         id: 're-card' + num,
         style: style,
         onMouseDown: this.handleDown,
@@ -384,8 +369,8 @@ function (_Component) {
         onMouseLeave: this.handleUp,
         onTouchStart: this.handleTouchStart,
         onTouchMove: this.handleTouchMove,
-        onTouchEnd: this.handleTouchEnd
-      }, "Hello\uD83C\uDF89") : null;
+        onTouchEnd: this.handleUp
+      }, children);
     }
   }]);
 

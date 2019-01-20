@@ -17,12 +17,6 @@ class Card extends Component{
 			k: 0.2,
 			restX: 0,
 			restY: 0,
-			fx: 0,
-			fy: 0,
-			ax: 0,
-			ay: 0,
-			vx: 0.0,
-			vy: 0.0,
 			mass: 0.7,
 			damping: 0.8
 		};
@@ -30,17 +24,20 @@ class Card extends Component{
 		this.handleUp = this.handleUp.bind(this);
         this.handleMove = this.handleMove.bind(this);
         this.handleTouchStart = this.handleTouchStart.bind(this);
-		this.handleTouchEnd = this.handleTouchEnd.bind(this);
 		this.handleTouchMove = this.handleTouchMove.bind(this);
 		this.animate = this.animate.bind(this);
 		this.updateCard = this.updateCard.bind(this);
-	}
-
-	componentDidMount() {
-		this.animate();
+		this.f={x:0,y:0};
+		this.a={x:0,y:0};
+		this.v={x:0,y:0};
 	}
 
 	handleDown(e) {
+		if(!this.state.active){ 
+			this.animate();
+		}
+		e.stopPropagation();
+		e.preventDefault();
 		this.setState({
 			move: true,
 			active: true,
@@ -50,6 +47,11 @@ class Card extends Component{
     }
     
     handleTouchStart(e) {
+		if(!this.state.active){ 
+			this.animate();
+		}
+		e.stopPropagation();
+		e.preventDefault();
 		e.persist();
 		this.setState({
 			move: true,
@@ -60,18 +62,17 @@ class Card extends Component{
 	}
 
     handleMove(e) {
+		e.preventDefault();
 		if (!this.state.limit) {
 			if (this.state.move) {
 				let mouseCurrPosX = e.clientX;
 				let mouseCurrPosY = e.clientY;
 				let Posx = mouseCurrPosX - this.state.mouseStartPosX;
 				let Posy = mouseCurrPosY - this.state.mouseStartPosY;
-				let el = document.getElementById("card" + this.props.no);
 				let height = window.innerHeight;
 				let width = window.innerWidth;
-				let maxX = width - width * 20 / 100;
 
-				function map_range(value, low1, high1, low2, high2) {
+				const map_range = (value, low1, high1, low2, high2) => {
 					return low2 + (high2 - low2) * (value - low1) / (high1 - low1);
 				}
 				
@@ -138,7 +139,7 @@ class Card extends Component{
 					}
 					let limit = true;
 					let move = false;
-					let damping = 0.06;
+					let damping = 0.08;
 					this.setState({
 						restX,
 						restY,
@@ -163,9 +164,11 @@ class Card extends Component{
 				let height = window.innerHeight;
 				let width = window.innerWidth;
 				let maxX = width - width * 20 / 100;
-				function map_range(value, low1, high1, low2, high2) {
+				
+				const map_range = (value, low1, high1, low2, high2) => {
 					return low2 + (high2 - low2) * (value - low1) / (high1 - low1);
 				}
+
 				let mouseRange = mouseCurrPosX;
 				if (mouseRange < width / 2) {
 					mouseRange = width - mouseRange;
@@ -247,51 +250,19 @@ class Card extends Component{
 			move: false
 		});
     }
-    
-    handleTouchEnd() {
-		this.setState({
-			move: false
-		});
-	}
 
     updateCard() {
 		if (!this.state.move) {
-			this.setState(
-				{
-					fx: -this.state.k * (this.state.Posx - this.state.restX),
-					fy: -this.state.k * (this.state.Posy - this.state.restY)
-				},
-				() => {
-					this.setState(
-						{
-							ax: this.state.fx / this.state.mass,
-							ay: this.state.fy / this.state.mass
-						},
-						() => {
-							this.setState(
-								{
-									vx: this.state.damping * (this.state.vx + this.state.ax),
-									vy: this.state.damping * (this.state.vy + this.state.ay)
-								},
-								() => {
-									// console.log(this.state.vx)
-									if(this.state.limit){
-										if(Math.floor(this.state.vx)===0){
-											this.setState({
-												out:true
-											})
-										}
-									}
-									this.setState({
-										Posx: this.state.Posx + this.state.vx,
-										Posy: this.state.Posy + this.state.vy
-									})
-								}
-							);
-						}
-					);
-				}
-			);
+			this.f.x= -this.state.k * (this.state.Posx - this.state.restX);
+			this.f.y= -this.state.k * (this.state.Posy - this.state.restY);
+			this.a.x= this.f.x/this.state.mass;
+			this.a.y= this.f.y/this.state.mass;
+			this.v.x= this.state.damping * (this.v.x + this.a.x);
+			this.v.y= this.state.damping * (this.v.y + this.a.y);
+			this.setState({
+				Posx: this.state.Posx + this.v.x,
+				Posy: this.state.Posy + this.v.y
+			})
 		}
 	}
 
@@ -302,25 +273,17 @@ class Card extends Component{
 			this.state.Posx < -window.innerWidth - 400
 		) {
 			cancelAnimationFrame(this.animate);
+			this.props.updateChildren();
 		} else {
 			requestAnimationFrame(this.animate);
 		}
 		if (this.state.active) {
-			el.style.transform =
-				"translate(" +
-				this.state.Posx +
-				"px" +
-				"," +
-				this.state.Posy +
-				"px) rotate(" +
-				this.state.Posx / 9 +
-				"deg) perspective(800px)";
 			this.updateCard();
         }
 	}
 	
     render(){
-        let {num} = this.props;
+        let {num,children,width,height} = this.props;
         let style = {
             position:'absolute',
             left: '0px',
@@ -331,32 +294,31 @@ class Card extends Component{
             marginRight: 'auto',
             marginTop: 'auto',
             marginBottom:'auto',
-            width:'250px',
-            height:'350px',
-            backgroundImage: 'linear-gradient(to top, #00c6fb 0%, #005bea 100%)',
-            color:'#fff',
-            fontFamily: 'sans-serif',
-            borderRadius: '18px',
-            textAlign:'center',
-            fontWeight: 'bolder',
-            fontSize: '48px',
-            paddingTop: '17%',
+			boxSizing:'border-box',
+			width:width,
+			height:height,
+			transform :
+				"translate(" +
+				this.state.Posx +
+				"px" +
+				"," +
+				this.state.Posy +
+				"px) rotate(" +
+				this.state.Posx / 9 +
+				"deg) perspective(800px)"
 		}
 		
         return(
-			!this.state.out?
 				<div id={'re-card'+num} style={style} onMouseDown={this.handleDown}
 					onMouseMove={this.handleMove}
 					onMouseUp={this.handleUp}
 					onMouseLeave={this.handleUp}
 					onTouchStart={this.handleTouchStart}
 					onTouchMove={this.handleTouchMove}
-					onTouchEnd={this.handleTouchEnd}
+					onTouchEnd={this.handleUp}
 				>
-					Hello🎉
+					{children}
 				</div>
-			:
-			null
         )
     }
 }

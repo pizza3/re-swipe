@@ -52,139 +52,68 @@ function (_Component) {
       k: 0.2,
       mass: 0.7,
       damping: 0.8,
-      arr: []
+      arr: [],
+      displayChildren: [],
+      maxElement: 4
     };
-    _this.handleDown = _this.handleDown.bind(_assertThisInitialized(_assertThisInitialized(_this)));
-    _this.handleUp = _this.handleUp.bind(_assertThisInitialized(_assertThisInitialized(_this)));
-    _this.handleMove = _this.handleMove.bind(_assertThisInitialized(_assertThisInitialized(_this)));
-    _this.animate = _this.animate.bind(_assertThisInitialized(_assertThisInitialized(_this)));
-    _this.updateCard = _this.updateCard.bind(_assertThisInitialized(_assertThisInitialized(_this)));
     _this.renderChildren = _this.renderChildren.bind(_assertThisInitialized(_assertThisInitialized(_this)));
+    _this.updateChildren = _this.updateChildren.bind(_assertThisInitialized(_assertThisInitialized(_this)));
     return _this;
   }
 
   _createClass(Container, [{
     key: "componentDidMount",
     value: function componentDidMount() {
-      console.log('mounted');
-      this.force = {
-        x: 0,
-        y: 0
-      };
-      this.acc = {
-        x: 0,
-        y: 0
-      };
-      this.vel = {
-        x: 0,
-        y: 0
-      };
-      this.elemenTrack = [];
-      this.renderChildren(); // window.addEventListener('mousemove',(e)=>{this.handleMove(e)})
-      // this.animate();
-    }
-  }, {
-    key: "handleDown",
-    value: function handleDown(e, val) {
-      e.preventDefault();
-      console.log(val + 'card');
-      this.setState({
-        move: true,
-        current: val,
-        clickPos: {
-          x: e.clientX,
-          y: e.clientY
-        }
-      });
-    }
-  }, {
-    key: "handleUp",
-    value: function handleUp(e) {
-      e.preventDefault();
-      this.setState({
-        move: false
-      });
-    }
-  }, {
-    key: "handleMove",
-    value: function handleMove(e) {
-      e.preventDefault();
-      var clickPos = this.state.clickPos;
-
-      if (this.state.move) {
-        this.setState({
-          pos: {
-            x: e.clientX - clickPos.x,
-            y: e.clientY - clickPos.y
-          }
-        });
-      }
-    }
-  }, {
-    key: "updateCard",
-    value: function updateCard() {
-      var _this$state = this.state,
-          pos = _this$state.pos,
-          current = _this$state.current,
-          mass = _this$state.mass,
-          k = _this$state.k,
-          damping = _this$state.damping;
-      this.force = {
-        x: -k * (pos.x - 0.5),
-        y: -k * (pos.y - 0.5)
-      };
-      this.acc = {
-        x: this.force.x / mass,
-        y: this.force.y / mass
-      };
-      this.vel = {
-        x: damping * (this.vel.x + this.acc.x),
-        y: damping * (this.vel.y + this.acc.y)
-      };
-      this.setState({
-        pos: {
-          x: this.vel.x + this.state.pos.x,
-          y: this.vel.y + this.state.pos.y
-        }
-      }, function () {
-        document.getElementById("re-card".concat(current)).style.transform = "translate(".concat(pos.x, "px ,").concat(pos.y, "px )");
-      });
-    }
-  }, {
-    key: "animate",
-    value: function animate() {
-      var _this$state2 = this.state,
-          pos = _this$state2.pos,
-          current = _this$state2.current;
-      requestAnimationFrame(this.animate);
-
-      if (!this.state.move) {
-        this.updateCard();
-      } else {
-        document.getElementById("re-card".concat(current)).style.transform = "translate(".concat(pos.x, "px ,").concat(pos.y, "px )");
-      }
+      this.renderChildren();
     }
   }, {
     key: "renderChildren",
     value: function renderChildren() {
       var _this2 = this;
 
-      var children = this.props.children;
+      var children = this.props.children.slice(0, this.props.children.length);
       var arr = [];
+      var displayChildren = [];
 
       _react.default.Children.toArray(children).map(function (child, i) {
         arr.push(_react.default.cloneElement(child, {
           key: i,
           num: i,
           handleDown: _this2.handleDown,
-          handleUp: _this2.handleUp
+          handleUp: _this2.handleUp,
+          updateChildren: _this2.updateChildren
         }));
-      }); // console.log(arr);
-
-
-      this.setState({
-        arr: arr
       });
+
+      displayChildren = arr.slice(this.props.children.length - this.state.maxElement, this.props.children.length);
+      this.setState({
+        arr: arr,
+        children: this.props.children,
+        displayChildren: displayChildren
+      });
+    }
+  }, {
+    key: "updateChildren",
+    value: function updateChildren() {
+      var _this$state = this.state,
+          arr = _this$state.arr,
+          maxElement = _this$state.maxElement,
+          displayChildren = _this$state.displayChildren;
+      maxElement += 1;
+      displayChildren.pop();
+
+      if (this.props.children.length >= maxElement) {
+        displayChildren.unshift(arr[this.props.children.length - maxElement]);
+        this.setState({
+          displayChildren: displayChildren,
+          maxElement: maxElement
+        });
+      } else {
+        this.setState({
+          displayChildren: displayChildren,
+          maxElement: maxElement
+        });
+      }
     }
   }, {
     key: "render",
@@ -197,7 +126,7 @@ function (_Component) {
       };
       return _react.default.createElement("div", {
         style: style
-      }, this.state.arr);
+      }, this.state.displayChildren);
     }
   }]);
 
