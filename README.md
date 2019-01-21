@@ -5,6 +5,11 @@
 re-swipe is a card swipe concept as seen on applications such as tinder, which provides the card like component
 and the track of accept and reject state of each and every card.
 
+
+<p align="left" >
+  <img src="https://media.giphy.com/media/2Yj2wLCtjRBTf4LFSz/source.gif" height="auto" width="33.3%">
+</p>
+
 ## Basic Usage
 
 ```js
