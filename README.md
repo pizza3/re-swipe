@@ -2,9 +2,7 @@
 
 ## Introduction
 
-re-swipe is a card swipe concept as seen on applications such as tinder, which provides the card like component
-and the track of accept and reject state of each and every card.
-
+re-swipe is a react component library emulating the UI card swipe as seen on applications such as tinder, this component provides the state track for each card, controls for physic's animation, dynamic trigger, and other feature's.
 
 <p align="left" >
   <img src="https://media.giphy.com/media/2Yj2wLCtjRBTf4LFSz/source.gif" height="auto" width="33.3%">
@@ -55,6 +53,19 @@ class App extends Component{
 | height        | Provide the height of the child component | Int | 400 |
 
 ## How does it work
+
+It consist of two components `<Container/>` and the `<Child/>`, the `<Container/>` component is used to keep track of each card component 
+being swipped left and right. By default the `<Container/>` component only 
+render's 4 cards component only for better animation performace and also 
+consistency.
+
+The `<Container>` take's the `offset` prop which is by default set to 10,
+the `offset` will be used to check if the point of contact with a `<Card/>`
+component is under the offset area which will trigger the swipe mechanism.
+
+<p align="center" >
+  <img src="./img1.png" height="auto" width="60%">
+</p>
 
 ## Demo
 
