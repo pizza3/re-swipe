@@ -6,7 +6,13 @@ re-swipe is a react component library emulating the UI card swipe as seen on app
 
 <p align="left" >
   <img src="https://github.com/pizza3/asset/blob/master/Jan-22-2019%2000-54-20.gif?raw=true" height="auto" width="33.3%">
+    <img src="https://github.com/pizza3/asset/blob/master/Jan-22-2019%2009-48-47.gif?raw=true" height="auto" width="33.3%">
 </p>
+
+<p align="center" >
+
+</p>
+
 
 ## Basic Usage
 
