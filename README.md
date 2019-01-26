@@ -13,7 +13,7 @@ re-swipe is a react component library emulating the UI card swipe as seen on app
 
 ```js
 import React, { Component } from "react";
-import ReContainer, { ReCard } from "re-swipe";
+import ReContainer, { ReCard } from "re-cardswipe";
 
 class App extends Component{
     constructor(props){
