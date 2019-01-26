@@ -9,16 +9,11 @@ re-swipe is a react component library emulating the UI card swipe as seen on app
     <img src="https://github.com/pizza3/asset/blob/master/Jan-22-2019%2009-48-47.gif?raw=true" height="auto" width="33.3%">
 </p>
 
-<p align="center" >
-
-</p>
-
-
 ## Basic Usage
 
 ```js
 import React, { Component } from "react";
-import Container, { Card } from "re-swipe";
+import ReContainer, { ReCard } from "re-swipe";
 
 class App extends Component{
     constructor(props){
@@ -30,9 +25,9 @@ class App extends Component{
 
     render(){
         return(
-            <Container>
-                <Card></Card>
-            </Container>
+            <ReContainer>
+                <ReCard></ReCard>
+            </ReContainer>
         )
     }
 }
@@ -41,7 +36,7 @@ class App extends Component{
 
 ## API
 
-`<Container>`
+`<ReContainer>`
 
 | Prop          | Description   | Type  | Default Value | Expected Values |
 | ------------- |:-------------|:-----:|:-----|:-----|
@@ -51,7 +46,7 @@ class App extends Component{
 | height        | The height for parent container | Int      | 500 | -  |
 | offset        | The offset trigger areas on left and right | Int | 10 | 5 - 40 |
 
-`<Card>`
+`<ReCard>`
 
 | Prop          | Description   | Type  | Default Value |
 | ------------- |:-------------|:-----:|:-----|
@@ -60,12 +55,14 @@ class App extends Component{
 
 ## How does it work
 
-It consist of two components `<Container/>` and the `<Child/>`, the `<Container/>` component is used to keep track of each card component 
-being swipped left and right. By default the `<Container/>` component only 
-render's 4 cards component only for better animation performace and also 
-consistency.
+It consist of two components `<ReContainer/>` and the `<ReCard/>`, the `<ReContainer/>` component is used to keep track of each card component 
+being swipped left and right. By default the `<ReContainer/>` component only 
+render's 4 cards component only for better animation and performace. Each 
+`<Card/>` component has to be provided width a callback function which is
+used to return o the state of the card when swiped to the left or swiped
+to the right.
 
-The `<Container>` take's the `offset` prop which is by default set to 10,
+The `<ReContainer>` take's the `offset` prop which is by default set to 10,
 the `offset` will be used to check if the point of contact with a `<Card/>`
 component is under the offset area which will trigger the swipe mechanism.
 
@@ -76,3 +73,6 @@ component is under the offset area which will trigger the swipe mechanism.
 ## Demo
 
 ## License
+
+MIT
+

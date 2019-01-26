@@ -1,6 +1,6 @@
 {
     "name": "re-swipe",
-    "version": "1.0.0",
+    "version": "0.0.1",
     "description": "",
     "main": "build/index.js",
     "scripts": {
@@ -27,5 +27,6 @@
         "babel-plugin-transform-class-properties": "^6.24.1",
         "react": "^16.6.3",
         "react-dom": "^16.6.3"
-    }
+    },
+    "dependencies": {}
 }

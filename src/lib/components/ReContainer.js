@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 
-class Container extends Component{
+class ReContainer extends Component{
     constructor(props){
         super(props);
         this.state={
@@ -100,4 +100,4 @@ class Container extends Component{
     }
 }
 
-export default Container;
+export default ReContainer;

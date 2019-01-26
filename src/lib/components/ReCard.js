@@ -1,6 +1,6 @@
 import React,{Component} from 'react';
 
-class Card extends Component{
+class ReCard extends Component{
     constructor(props) {
 		super(props);
 		this.state = {
@@ -110,7 +110,7 @@ class Card extends Component{
 					}
 					let limit = true;
 					let move = false;
-					let damping = 0.06;
+					let damping = 0.05;
 					this.setState(
 						{
 							restX,
@@ -139,7 +139,7 @@ class Card extends Component{
 					}
 					let limit = true;
 					let move = false;
-					let damping = 0.08;
+					let damping = 0.05;
 					this.setState({
 						restX,
 						restY,
@@ -323,4 +323,4 @@ class Card extends Component{
     }
 }
 
-export default Card;
+export default ReCard;

@@ -1,4 +1,4 @@
-import Container from './components/Container';
+import ReContainer from './components/ReContainer';
 
-export default Container;
-export { default as Card } from './components/Card';
+export default ReContainer;
+export { default as ReCard } from './components/ReCard';
