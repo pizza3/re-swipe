@@ -9,6 +9,12 @@ re-swipe is a react component library emulating the UI card swipe as seen on app
     <img src="https://github.com/pizza3/asset/blob/master/Jan-22-2019%2009-48-47.gif?raw=true" height="auto" width="33.3%">
 </p>
 
+## Installation
+
+```zsh
+npm install re-cardswipe --save
+```
+
 ## Basic Usage
 
 ```js
@@ -67,7 +73,7 @@ the `offset` will be used to check if the point of contact with a `<Card/>`
 component is under the offset area which will trigger the swipe mechanism.
 
 <p align="center" >
-  <img src="./img1.png" height="auto" width="60%">
+  <img src="https://raw.githubusercontent.com/pizza3/asset/master/img1.png" height="auto" width="60%">
 </p>
 
 ## Demo
