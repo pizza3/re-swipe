@@ -4,14 +4,12 @@ const map_range = (value, low1, high1, low2, high2) => {
   return low2 + ((high2 - low2) * (value - low1)) / (high1 - low1);
 };
 
-const pythagorean = (sideA, sideB) => {
-  return Math.sqrt(Math.pow(sideA, 2) + Math.pow(sideB, 2));
-}
 class ReCard extends Component {
   constructor(props) {
     super(props);
     this.state = {
       active: false,
+      triggerDown: true,
       move: false,
       limit: false,
       out: false,
@@ -38,20 +36,21 @@ class ReCard extends Component {
     this.Ref = React.createRef();
   }
   handleDown(e) {
-    const { active } = this.state;
-    if (!active) {
-      this.animate();
-    }
     e.stopPropagation();
     e.preventDefault();
     e.persist();
-    this.setState({
-      move: true,
-      active: true,
-      mouseStartPosX: e.touches ? e.touches[0].screenX : e.clientX,
-      mouseStartPosY: e.touches ? e.touches[0].screenY : e.clientY
-    });
-    // this.moveLeft()
+    const { active, triggerDown } = this.state;
+    if (triggerDown) {
+      if (!active) {
+        this.animate();
+      }
+      this.setState({
+        move: true,
+        active: true,
+        mouseStartPosX: e.touches ? e.touches[0].screenX : e.clientX,
+        mouseStartPosY: e.touches ? e.touches[0].screenY : e.clientY
+      });
+    }
   }
   handleMove(e) {
     e.preventDefault();
@@ -98,25 +97,20 @@ class ReCard extends Component {
         // checks if mouse pointer reached far right of the container
         if (mouseCurrPosX > (width * 80) / 100 || left > (width * 80) / 100) {
           let restX, restY;
-          restX = this.state.Posx + pythagorean(this.props.width,this.props.height);
+          // this implementation for rest position x is still a hacky logic, not solid enough!
+          restX = window.innerWidth / 2 + this.props.height;
           restY = this.state.Posy * 5;
           let limit = true;
           let move = false;
-          let damping = 0.1;
-          this.setState(
-            {
-              restX,
-              restY,
-              limit,
-              move,
-              damping
-            },
-            () => {
-              setTimeout(() => {
-                window.cancelAnimationFrame(this.animate);
-              }, 10);
-            }
-          );
+          let damping = 0.15;
+          this.setState({
+            restX,
+            restY,
+            limit,
+            move,
+            damping,
+            triggerDown: false
+          });
         }
         // checks if mouse pointer reached far left of the container
         else if (
@@ -124,17 +118,18 @@ class ReCard extends Component {
           right < (width * 20) / 100
         ) {
           let restX, restY;
-          restX = this.state.Posx - pythagorean(this.props.width,this.props.height);
+          restX = -window.innerWidth / 2 - this.props.height;
           restY = this.state.Posy * 5;
           let limit = true;
           let move = false;
-          let damping = 0.1;
+          let damping = 0.15;
           this.setState({
             restX,
             restY,
             limit,
             move,
-            damping
+            damping,
+            triggerDown: false
           });
         }
       }
@@ -147,16 +142,16 @@ class ReCard extends Component {
     });
   }
 
-  moveRight = ()=>{
+  moveRight = () => {
     let restX, restY;
     this.setState({
       move: true,
       active: true,
-      mouseStartPosX: window.innerWidth/2,
-      mouseStartPosY: window.innerHeight/2
+      mouseStartPosX: window.innerWidth / 2,
+      mouseStartPosY: window.innerHeight / 2
     });
     restX = window.innerWidth * 5;
-    restY = window.innerHeight/2;
+    restY = window.innerHeight / 2;
     let limit = true;
     let move = false;
     let damping = 0.02;
@@ -167,18 +162,18 @@ class ReCard extends Component {
       move,
       damping
     });
-  }
+  };
 
-  moveLeft = ()=>{
+  moveLeft = () => {
     let restX, restY;
     this.setState({
       move: true,
       active: true,
-      mouseStartPosX: window.innerWidth/2,
-      mouseStartPosY: window.innerHeight/2
+      mouseStartPosX: window.innerWidth / 2,
+      mouseStartPosY: window.innerHeight / 2
     });
     restX = -window.innerWidth * 5;
-    restY = window.innerHeight/2;
+    restY = window.innerHeight / 2;
     let limit = true;
     let move = false;
     let damping = 0.02;
@@ -189,7 +184,7 @@ class ReCard extends Component {
       move,
       damping
     });
-  }
+  };
 
   updateCard() {
     const { k, Posx, Posy, restX, restY, mass, damping } = this.state;
@@ -214,12 +209,12 @@ class ReCard extends Component {
   animate() {
     const { left, right } = this.Ref.current.getBoundingClientRect();
     // stop the raf loop and unmount the card from the container
-    const isRight = left > window.innerWidth
-    const isLeft = right < 0
-    const swipeDirection = isLeft?'left':'right'
+    const isRight = left > window.innerWidth;
+    const isLeft = right < 0;
+    const swipeDirection = isLeft ? "left" : "right";
     if (isLeft || isRight) {
       cancelAnimationFrame(this._frameId);
-      this.props.handleOnSwipe(swipeDirection,this.props.metaData||{})
+      this.props.handleOnSwipe(swipeDirection, this.props.metaData || {});
       this.props.updateChildren();
     } else {
       this._frameId = requestAnimationFrame(this.animate);
@@ -268,9 +263,8 @@ class ReCard extends Component {
         ? `0px 0px 31px -15px rgba(0,0,0,0.75)`
         : `0px 0px 31px -9px rgba(0,0,0,0.0)`,
       transform: move ? `scale(1.1)` : `scale(1)`,
-      transition: " 1s cubic-bezier(0.19, 1, 0.22, 1)"
+      transition: " 0.4s cubic-bezier(0.19, 1, 0.22, 1)"
     };
-
     return (
       <div
         style={style}

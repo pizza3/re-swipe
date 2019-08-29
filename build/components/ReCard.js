@@ -33,10 +33,6 @@ var map_range = function map_range(value, low1, high1, low2, high2) {
   return low2 + (high2 - low2) * (value - low1) / (high1 - low1);
 };
 
-var pythagorean = function pythagorean(sideA, sideB) {
-  return Math.sqrt(Math.pow(sideA, 2) + Math.pow(sideB, 2));
-};
-
 var ReCard =
 /*#__PURE__*/
 function (_Component) {
@@ -101,6 +97,7 @@ function (_Component) {
 
     _this.state = {
       active: false,
+      triggerDown: true,
       move: false,
       limit: false,
       out: false,
@@ -140,36 +137,38 @@ function (_Component) {
   _createClass(ReCard, [{
     key: "handleDown",
     value: function handleDown(e) {
-      var active = this.state.active;
-
-      if (!active) {
-        this.animate();
-      }
-
       e.stopPropagation();
       e.preventDefault();
       e.persist();
-      this.setState({
-        move: true,
-        active: true,
-        mouseStartPosX: e.touches ? e.touches[0].screenX : e.clientX,
-        mouseStartPosY: e.touches ? e.touches[0].screenY : e.clientY
-      }); // this.moveLeft()
+      var _this$state = this.state,
+          active = _this$state.active,
+          triggerDown = _this$state.triggerDown;
+
+      if (triggerDown) {
+        if (!active) {
+          this.animate();
+        }
+
+        this.setState({
+          move: true,
+          active: true,
+          mouseStartPosX: e.touches ? e.touches[0].screenX : e.clientX,
+          mouseStartPosY: e.touches ? e.touches[0].screenY : e.clientY
+        });
+      }
     }
   }, {
     key: "handleMove",
     value: function handleMove(e) {
-      var _this2 = this;
-
       e.preventDefault();
       e.persist();
-      var _this$state = this.state,
-          limit = _this$state.limit,
-          move = _this$state.move,
-          mouseStartPosX = _this$state.mouseStartPosX,
-          mouseStartPosY = _this$state.mouseStartPosY,
-          Posx = _this$state.Posx,
-          Posy = _this$state.Posy;
+      var _this$state2 = this.state,
+          limit = _this$state2.limit,
+          move = _this$state2.move,
+          mouseStartPosX = _this$state2.mouseStartPosX,
+          mouseStartPosY = _this$state2.mouseStartPosY,
+          Posx = _this$state2.Posx,
+          Posy = _this$state2.Posy;
 
       var _this$Ref$current$get = this.Ref.current.getBoundingClientRect(),
           left = _this$Ref$current$get.left,
@@ -203,38 +202,37 @@ function (_Component) {
           }); // checks if mouse pointer reached far right of the container
 
           if (mouseCurrPosX > width * 80 / 100 || left > width * 80 / 100) {
-            var restX, restY;
-            restX = this.state.Posx + pythagorean(this.props.width, this.props.height);
+            var restX, restY; // this implementation for rest position x is still a hacky logic, not solid enough!
+
+            restX = window.innerWidth / 2 + this.props.height;
             restY = this.state.Posy * 5;
             var _limit = true;
             var _move = false;
-            var _damping = 0.1;
+            var _damping = 0.15;
             this.setState({
               restX: restX,
               restY: restY,
               limit: _limit,
               move: _move,
-              damping: _damping
-            }, function () {
-              setTimeout(function () {
-                window.cancelAnimationFrame(_this2.animate);
-              }, 10);
+              damping: _damping,
+              triggerDown: false
             });
           } // checks if mouse pointer reached far left of the container
           else if (mouseCurrPosX < width * 20 / 100 || right < width * 20 / 100) {
               var _restX, _restY;
 
-              _restX = this.state.Posx - pythagorean(this.props.width, this.props.height);
+              _restX = -window.innerWidth / 2 - this.props.height;
               _restY = this.state.Posy * 5;
               var _limit2 = true;
               var _move2 = false;
-              var _damping2 = 0.1;
+              var _damping2 = 0.15;
               this.setState({
                 restX: _restX,
                 restY: _restY,
                 limit: _limit2,
                 move: _move2,
-                damping: _damping2
+                damping: _damping2,
+                triggerDown: false
               });
             }
         }
@@ -250,14 +248,14 @@ function (_Component) {
   }, {
     key: "updateCard",
     value: function updateCard() {
-      var _this$state2 = this.state,
-          k = _this$state2.k,
-          Posx = _this$state2.Posx,
-          Posy = _this$state2.Posy,
-          restX = _this$state2.restX,
-          restY = _this$state2.restY,
-          mass = _this$state2.mass,
-          damping = _this$state2.damping;
+      var _this$state3 = this.state,
+          k = _this$state3.k,
+          Posx = _this$state3.Posx,
+          Posy = _this$state3.Posy,
+          restX = _this$state3.restX,
+          restY = _this$state3.restY,
+          mass = _this$state3.mass,
+          damping = _this$state3.damping;
 
       if (!this.state.move) {
         // calculate the total force using spring constant f=-kx
@@ -286,7 +284,7 @@ function (_Component) {
 
       var isRight = left > window.innerWidth;
       var isLeft = right < 0;
-      var swipeDirection = isLeft ? 'left' : 'right';
+      var swipeDirection = isLeft ? "left" : "right";
 
       if (isLeft || isRight) {
         cancelAnimationFrame(this._frameId);
@@ -307,10 +305,10 @@ function (_Component) {
           children = _this$props.children,
           width = _this$props.width,
           height = _this$props.height;
-      var _this$state3 = this.state,
-          move = _this$state3.move,
-          Posx = _this$state3.Posx,
-          Posy = _this$state3.Posy;
+      var _this$state4 = this.state,
+          move = _this$state4.move,
+          Posx = _this$state4.Posx,
+          Posy = _this$state4.Posy;
       var style = {
         position: "absolute",
         left: "0px",
@@ -336,7 +334,7 @@ function (_Component) {
         borderRadius: "18px",
         boxShadow: move ? "0px 0px 31px -15px rgba(0,0,0,0.75)" : "0px 0px 31px -9px rgba(0,0,0,0.0)",
         transform: move ? "scale(1.1)" : "scale(1)",
-        transition: " 1s cubic-bezier(0.19, 1, 0.22, 1)"
+        transition: " 0.4s cubic-bezier(0.19, 1, 0.22, 1)"
       };
       return _react.default.createElement("div", {
         style: style,

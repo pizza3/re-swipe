@@ -48,8 +48,8 @@ class App extends Component{
 | ------------- |:-------------|:-----:|:-----|:-----|
 | mass          | Provide the mass for animation.            | float | 0.7 | 0.1 - 1 |
 | damping       | Provide the damping for animation.         | float | 0.8 | 0.1 - 2 |
-| width         | The width for parent container  | Int      | 300 | -  | 
-| height        | The height for parent container | Int      | 500 | -  |
+| width         | The width for parent container  | int      | 300 | -  | 
+| height        | The height for parent container | int      | 500 | -  |
 | onSwipe       | Callback function, executed when the card has been swiped.  | func() | - | - |
 | trigger       | shows Accept and Reject button when true | boolean | false | - |
 
@@ -58,8 +58,8 @@ class App extends Component{
 
 | Prop          | Description   | Type  | Default Value |
 | ------------- |:-------------|:-----:|:-----|
-| width         | Provide the width of the child component  | Int | 300 |
-| height        | Provide the height of the child component | Int | 400 |
+| width         | Provide the width of the child component  | int | 300 |
+| height        | Provide the height of the child component | int | 400 |
 | metaData      | object recieved in `onSwipe()` the callback function, store any form of data related  to the specific card | object | {} |
 
 ## How does it work
