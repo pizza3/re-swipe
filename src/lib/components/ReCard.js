@@ -4,6 +4,9 @@ const map_range = (value, low1, high1, low2, high2) => {
   return low2 + ((high2 - low2) * (value - low1)) / (high1 - low1);
 };
 
+const pythagorean = (sideA, sideB) => {
+  return Math.sqrt(Math.pow(sideA, 2) + Math.pow(sideB, 2));
+}
 class ReCard extends Component {
   constructor(props) {
     super(props);
@@ -95,14 +98,11 @@ class ReCard extends Component {
         // checks if mouse pointer reached far right of the container
         if (mouseCurrPosX > (width * 80) / 100 || left > (width * 80) / 100) {
           let restX, restY;
-          restX = this.state.Posx * 5;
+          restX = this.state.Posx + pythagorean(this.props.width,this.props.height);
           restY = this.state.Posy * 5;
-          if (mouseCurrPosX < width / 2) {
-            restX = -this.state.Posx * 5;
-          }
           let limit = true;
           let move = false;
-          let damping = 0.05;
+          let damping = 0.1;
           this.setState(
             {
               restX,
@@ -124,14 +124,11 @@ class ReCard extends Component {
           right < (width * 20) / 100
         ) {
           let restX, restY;
-          restX = this.state.Posx * 5;
+          restX = this.state.Posx - pythagorean(this.props.width,this.props.height);
           restY = this.state.Posy * 5;
-          if (mouseCurrPosX > width / 2) {
-            restX = -this.state.Posx * 5;
-          }
           let limit = true;
           let move = false;
-          let damping = 0.05;
+          let damping = 0.1;
           this.setState({
             restX,
             restY,

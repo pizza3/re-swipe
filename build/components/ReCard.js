@@ -33,6 +33,10 @@ var map_range = function map_range(value, low1, high1, low2, high2) {
   return low2 + (high2 - low2) * (value - low1) / (high1 - low1);
 };
 
+var pythagorean = function pythagorean(sideA, sideB) {
+  return Math.sqrt(Math.pow(sideA, 2) + Math.pow(sideB, 2));
+};
+
 var ReCard =
 /*#__PURE__*/
 function (_Component) {
@@ -200,16 +204,11 @@ function (_Component) {
 
           if (mouseCurrPosX > width * 80 / 100 || left > width * 80 / 100) {
             var restX, restY;
-            restX = this.state.Posx * 5;
+            restX = this.state.Posx + pythagorean(this.props.width, this.props.height);
             restY = this.state.Posy * 5;
-
-            if (mouseCurrPosX < width / 2) {
-              restX = -this.state.Posx * 5;
-            }
-
             var _limit = true;
             var _move = false;
-            var _damping = 0.05;
+            var _damping = 0.1;
             this.setState({
               restX: restX,
               restY: restY,
@@ -225,16 +224,11 @@ function (_Component) {
           else if (mouseCurrPosX < width * 20 / 100 || right < width * 20 / 100) {
               var _restX, _restY;
 
-              _restX = this.state.Posx * 5;
+              _restX = this.state.Posx - pythagorean(this.props.width, this.props.height);
               _restY = this.state.Posy * 5;
-
-              if (mouseCurrPosX > width / 2) {
-                _restX = -this.state.Posx * 5;
-              }
-
               var _limit2 = true;
               var _move2 = false;
-              var _damping2 = 0.05;
+              var _damping2 = 0.1;
               this.setState({
                 restX: _restX,
                 restY: _restY,

@@ -47,10 +47,12 @@ class App extends Component{
 | Prop          | Description   | Type  | Default Value | Expected Values |
 | ------------- |:-------------|:-----:|:-----|:-----|
 | mass          | Provide the mass for animation.            | Float | 0.7 | 0.1 - 1 |
-| damping       | Provide the damping for animation.         | Float | 0.8 | 0.1 - 2|
+| damping       | Provide the damping for animation.         | Float | 0.8 | 0.1 - 2 |
 | width         | The width for parent container  | Int      | 300 | -  | 
 | height        | The height for parent container | Int      | 500 | -  |
-| offset        | The offset trigger areas on left and right | Int | 10 | 5 - 40 |
+| onSwipe       | Callback function, executed when the card has been swiped.  | func() | - | - |
+| trigger       | shows Accept and Reject button when true | boolean | false | - |
+
 
 `<ReCard>`
 
