@@ -45,18 +45,132 @@ function (_Component) {
 
     _this = _possibleConstructorReturn(this, _getPrototypeOf(ReCard).call(this, props));
 
+    _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "handleDown", function (e) {
+      e.stopPropagation();
+      e.preventDefault();
+      e.persist();
+      var _this$state = _this.state,
+          active = _this$state.active,
+          triggerDown = _this$state.triggerDown;
+
+      if (triggerDown) {
+        if (!active) {
+          _this.animate();
+        }
+
+        _this.setState({
+          move: true,
+          active: true,
+          mouseStartPosX: e.touches ? e.touches[0].screenX : e.clientX,
+          mouseStartPosY: e.touches ? e.touches[0].screenY : e.clientY
+        });
+      }
+    });
+
+    _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "handleMove", function (e) {
+      e.preventDefault();
+      e.persist();
+      var _this$state2 = _this.state,
+          limit = _this$state2.limit,
+          move = _this$state2.move,
+          mouseStartPosX = _this$state2.mouseStartPosX,
+          mouseStartPosY = _this$state2.mouseStartPosY,
+          Posx = _this$state2.Posx,
+          Posy = _this$state2.Posy;
+
+      var _this$Ref$current$get = _this.Ref.current.getBoundingClientRect(),
+          left = _this$Ref$current$get.left,
+          right = _this$Ref$current$get.right;
+
+      var parentElement = _this.Ref.current.parentElement;
+
+      if (!limit) {
+        if (move) {
+          // assign current mouse position
+          var mouseCurrPosX = e.touches ? e.touches[0].screenX : e.clientX;
+          var mouseCurrPosY = e.touches ? e.touches[0].screenY : e.clientY; // distance between startPosition and newPosition
+
+          var _Posx = mouseCurrPosX - mouseStartPosX;
+
+          var _Posy = mouseCurrPosY - mouseStartPosY;
+
+          var width = parentElement.offsetWidth;
+          var mouseRange = mouseCurrPosX;
+
+          if (mouseRange < width / 2) {
+            mouseRange = width - mouseRange;
+          }
+
+          var damping = map_range(mouseRange, width / 2, width * 90 / 100, 0.6, 0.8);
+
+          _this.setState({
+            Posx: _Posx,
+            Posy: _Posy,
+            damping: damping,
+            mouseCurrPosX: mouseCurrPosX,
+            mouseCurrPosY: mouseCurrPosY
+          }); // checks if mouse pointer reached far right of the container
+
+
+          if (mouseCurrPosX > width * 80 / 100 || left > width * 80 / 100) {
+            var restX, restY; // this implementation for rest position x is still a hacky logic, not solid enough!
+
+            restX = parentElement.offsetWidth / 2 + _this.props.height;
+            restY = _this.state.Posy * 5;
+            var _limit = true;
+            var _move = false;
+            var _damping = 0.15;
+
+            _this.setState({
+              restX: restX,
+              restY: restY,
+              limit: _limit,
+              move: _move,
+              damping: _damping,
+              triggerDown: false
+            });
+          } // checks if mouse pointer reached far left of the container
+          else if (mouseCurrPosX < width * 20 / 100 || right < width * 20 / 100) {
+              var _restX, _restY;
+
+              _restX = -parentElement.offsetWidth / 2 - _this.props.height;
+              _restY = _this.state.Posy * 5;
+              var _limit2 = true;
+              var _move2 = false;
+              var _damping2 = 0.15;
+
+              _this.setState({
+                restX: _restX,
+                restY: _restY,
+                limit: _limit2,
+                move: _move2,
+                damping: _damping2,
+                triggerDown: false
+              });
+            }
+        }
+      }
+    });
+
+    _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "handleUp", function () {
+      _this.setState({
+        move: false
+      });
+    });
+
     _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "moveRight", function () {
       var restX, restY;
+      var parentElement = _this.Ref.current.parentElement;
 
       _this.setState({
         move: true,
         active: true,
-        mouseStartPosX: window.innerWidth / 2,
-        mouseStartPosY: window.innerHeight / 2
+        mouseStartPosX: parentElement.offsetWidth / 2,
+        mouseStartPosY: parentElement.offsetHeight / 2
       });
 
-      restX = window.innerWidth * 5;
-      restY = window.innerHeight / 2;
+      restX = parentElement.offsetWidth * 5;
+      restY = parentElement.offsetHeight / 2;
       var limit = true;
       var move = false;
       var damping = 0.02;
@@ -72,16 +186,17 @@ function (_Component) {
 
     _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "moveLeft", function () {
       var restX, restY;
+      var parentElement = _this.Ref.current.parentElement.parentElement;
 
       _this.setState({
         move: true,
         active: true,
-        mouseStartPosX: window.innerWidth / 2,
-        mouseStartPosY: window.innerHeight / 2
+        mouseStartPosX: parentElement.offsetWidth / 2,
+        mouseStartPosY: parentElement.offsetHeight / 2
       });
 
-      restX = -window.innerWidth * 5;
-      restY = window.innerHeight / 2;
+      restX = -parentElement.offsetWidth * 5;
+      restY = parentElement.offsetHeight / 2;
       var limit = true;
       var move = false;
       var damping = 0.02;
@@ -93,6 +208,60 @@ function (_Component) {
         move: move,
         damping: damping
       });
+    });
+
+    _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "updateCard", function () {
+      var _this$state3 = _this.state,
+          k = _this$state3.k,
+          Posx = _this$state3.Posx,
+          Posy = _this$state3.Posy,
+          restX = _this$state3.restX,
+          restY = _this$state3.restY,
+          mass = _this$state3.mass,
+          damping = _this$state3.damping;
+
+      if (!_this.state.move) {
+        // calculate the total force using spring constant f=-kx
+        _this.f.x = -k * (Posx - restX);
+        _this.f.y = -k * (Posy - restY); // use force to determine the acceleration
+
+        _this.a.x = _this.f.x / mass;
+        _this.a.y = _this.f.y / mass; // apply velocity
+
+        _this.v.x = damping * (_this.v.x + _this.a.x);
+        _this.v.y = damping * (_this.v.y + _this.a.y); // update position
+
+        _this.setState({
+          Posx: Posx + _this.v.x,
+          Posy: Posy + _this.v.y
+        });
+      }
+    });
+
+    _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "animate", function () {
+      var _this$Ref$current$get2 = _this.Ref.current.getBoundingClientRect(),
+          left = _this$Ref$current$get2.left,
+          right = _this$Ref$current$get2.right; // stop the raf loop and unmount the card from the container
+
+
+      var offsetWidth = _this.Ref.current.parentElement.offsetWidth;
+      var isRight = left > offsetWidth;
+      var isLeft = right < 0;
+      var swipeDirection = isLeft ? "left" : "right";
+
+      if (isLeft || isRight) {
+        cancelAnimationFrame(_this._frameId);
+
+        _this.props.handleOnSwipe(swipeDirection, _this.props.metaData || {});
+
+        _this.props.updateChildren();
+      } else {
+        _this._frameId = requestAnimationFrame(_this.animate);
+      }
+
+      if (_this.state.active) {
+        _this.updateCard();
+      }
     });
 
     _this.state = {
@@ -113,11 +282,6 @@ function (_Component) {
       mass: 0.7,
       damping: 0.8
     };
-    _this.handleDown = _this.handleDown.bind(_assertThisInitialized(_assertThisInitialized(_this)));
-    _this.handleUp = _this.handleUp.bind(_assertThisInitialized(_assertThisInitialized(_this)));
-    _this.handleMove = _this.handleMove.bind(_assertThisInitialized(_assertThisInitialized(_this)));
-    _this.animate = _this.animate.bind(_assertThisInitialized(_assertThisInitialized(_this)));
-    _this.updateCard = _this.updateCard.bind(_assertThisInitialized(_assertThisInitialized(_this)));
     _this.f = {
       x: 0,
       y: 0
@@ -135,170 +299,6 @@ function (_Component) {
   }
 
   _createClass(ReCard, [{
-    key: "handleDown",
-    value: function handleDown(e) {
-      e.stopPropagation();
-      e.preventDefault();
-      e.persist();
-      var _this$state = this.state,
-          active = _this$state.active,
-          triggerDown = _this$state.triggerDown;
-
-      if (triggerDown) {
-        if (!active) {
-          this.animate();
-        }
-
-        this.setState({
-          move: true,
-          active: true,
-          mouseStartPosX: e.touches ? e.touches[0].screenX : e.clientX,
-          mouseStartPosY: e.touches ? e.touches[0].screenY : e.clientY
-        });
-      }
-    }
-  }, {
-    key: "handleMove",
-    value: function handleMove(e) {
-      e.preventDefault();
-      e.persist();
-      var _this$state2 = this.state,
-          limit = _this$state2.limit,
-          move = _this$state2.move,
-          mouseStartPosX = _this$state2.mouseStartPosX,
-          mouseStartPosY = _this$state2.mouseStartPosY,
-          Posx = _this$state2.Posx,
-          Posy = _this$state2.Posy;
-
-      var _this$Ref$current$get = this.Ref.current.getBoundingClientRect(),
-          left = _this$Ref$current$get.left,
-          right = _this$Ref$current$get.right;
-
-      if (!limit) {
-        if (move) {
-          // assign current mouse position
-          var mouseCurrPosX = e.touches ? e.touches[0].screenX : e.clientX;
-          var mouseCurrPosY = e.touches ? e.touches[0].screenY : e.clientY; // distance between startPosition and newPosition
-
-          var _Posx = mouseCurrPosX - mouseStartPosX;
-
-          var _Posy = mouseCurrPosY - mouseStartPosY;
-
-          var height = window.innerHeight;
-          var width = window.innerWidth;
-          var mouseRange = mouseCurrPosX;
-
-          if (mouseRange < width / 2) {
-            mouseRange = width - mouseRange;
-          }
-
-          var damping = map_range(mouseRange, width / 2, width - width * 10 / 100, 0.6, 0.8);
-          this.setState({
-            Posx: _Posx,
-            Posy: _Posy,
-            damping: damping,
-            mouseCurrPosX: mouseCurrPosX,
-            mouseCurrPosY: mouseCurrPosY
-          }); // checks if mouse pointer reached far right of the container
-
-          if (mouseCurrPosX > width * 80 / 100 || left > width * 80 / 100) {
-            var restX, restY; // this implementation for rest position x is still a hacky logic, not solid enough!
-
-            restX = window.innerWidth / 2 + this.props.height;
-            restY = this.state.Posy * 5;
-            var _limit = true;
-            var _move = false;
-            var _damping = 0.15;
-            this.setState({
-              restX: restX,
-              restY: restY,
-              limit: _limit,
-              move: _move,
-              damping: _damping,
-              triggerDown: false
-            });
-          } // checks if mouse pointer reached far left of the container
-          else if (mouseCurrPosX < width * 20 / 100 || right < width * 20 / 100) {
-              var _restX, _restY;
-
-              _restX = -window.innerWidth / 2 - this.props.height;
-              _restY = this.state.Posy * 5;
-              var _limit2 = true;
-              var _move2 = false;
-              var _damping2 = 0.15;
-              this.setState({
-                restX: _restX,
-                restY: _restY,
-                limit: _limit2,
-                move: _move2,
-                damping: _damping2,
-                triggerDown: false
-              });
-            }
-        }
-      }
-    }
-  }, {
-    key: "handleUp",
-    value: function handleUp() {
-      this.setState({
-        move: false
-      });
-    }
-  }, {
-    key: "updateCard",
-    value: function updateCard() {
-      var _this$state3 = this.state,
-          k = _this$state3.k,
-          Posx = _this$state3.Posx,
-          Posy = _this$state3.Posy,
-          restX = _this$state3.restX,
-          restY = _this$state3.restY,
-          mass = _this$state3.mass,
-          damping = _this$state3.damping;
-
-      if (!this.state.move) {
-        // calculate the total force using spring constant f=-kx
-        this.f.x = -k * (Posx - restX);
-        this.f.y = -k * (Posy - restY); // use force to determine the acceleration
-
-        this.a.x = this.f.x / mass;
-        this.a.y = this.f.y / mass; // apply velocity
-
-        this.v.x = damping * (this.v.x + this.a.x);
-        this.v.y = damping * (this.v.y + this.a.y); // update position
-
-        this.setState({
-          Posx: Posx + this.v.x,
-          Posy: Posy + this.v.y
-        });
-      }
-    }
-  }, {
-    key: "animate",
-    value: function animate() {
-      var _this$Ref$current$get2 = this.Ref.current.getBoundingClientRect(),
-          left = _this$Ref$current$get2.left,
-          right = _this$Ref$current$get2.right; // stop the raf loop and unmount the card from the container
-
-
-      var isRight = left > window.innerWidth;
-      var isLeft = right < 0;
-      var swipeDirection = isLeft ? "left" : "right";
-
-      if (isLeft || isRight) {
-        cancelAnimationFrame(this._frameId);
-        this.props.handleOnSwipe(swipeDirection, this.props.metaData || {});
-        this.props.updateChildren();
-      } else {
-        this._frameId = requestAnimationFrame(this.animate);
-      }
-
-      if (this.state.active) {
-        this.updateCard();
-      }
-    }
-  }, {
     key: "render",
     value: function render() {
       var _this$props = this.props,
@@ -332,6 +332,8 @@ function (_Component) {
         width: width + "px",
         height: height + "px",
         borderRadius: "18px",
+        background: "#eeeeee",
+        border: children.length ? "1px solid #cecece" : "none",
         boxShadow: move ? "0px 0px 31px -15px rgba(0,0,0,0.75)" : "0px 0px 31px -9px rgba(0,0,0,0.0)",
         transform: move ? "scale(1.1)" : "scale(1)",
         transition: " 0.4s cubic-bezier(0.19, 1, 0.22, 1)"
@@ -355,5 +357,10 @@ function (_Component) {
   return ReCard;
 }(_react.Component);
 
+ReCard.defaultProps = {
+  width: 300,
+  height: 400,
+  metaData: {}
+};
 var _default = ReCard;
 exports.default = _default;

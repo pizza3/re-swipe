@@ -43,6 +43,57 @@ function (_Component) {
 
     _this = _possibleConstructorReturn(this, _getPrototypeOf(ReContainer).call(this, props));
 
+    _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "renderChildren", function () {
+      if (_react.default.Children.toArray(_this.props.children).length < 4) {
+        var children = _this.props.children;
+        var arr = [];
+        var displayChildren = [];
+
+        _react.default.Children.toArray(children).map(function (child, i) {
+          arr.push(_react.default.cloneElement(child, {
+            key: i,
+            num: i,
+            handleDown: _this.handleDown,
+            handleUp: _this.handleUp,
+            updateChildren: _this.updateChildren,
+            handleOnSwipe: _this.handleOnSwipe
+          }));
+        });
+
+        displayChildren = arr;
+
+        _this.setState({
+          arr: arr,
+          children: _this.props.children,
+          displayChildren: displayChildren
+        });
+      } else {
+        var _children = _this.props.children.slice(0, _this.props.children.length);
+
+        var _arr = [];
+        var _displayChildren = [];
+
+        _react.default.Children.toArray(_children).map(function (child, i) {
+          _arr.push(_react.default.cloneElement(child, {
+            key: i,
+            num: i,
+            handleDown: _this.handleDown,
+            handleUp: _this.handleUp,
+            updateChildren: _this.updateChildren,
+            handleOnSwipe: _this.handleOnSwipe
+          }));
+        });
+
+        _displayChildren = _arr.slice(_this.props.children.length - _this.state.maxElement, _this.props.children.length);
+
+        _this.setState({
+          arr: _arr,
+          children: _this.props.children,
+          displayChildren: _displayChildren
+        });
+      }
+    });
+
     _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "handleOnSwipe", function (swipeDirection, metaData) {
       var onSwipe = _this.props.onSwipe;
 
@@ -93,8 +144,6 @@ function (_Component) {
       maxElement: 3,
       cardOnTop: 0
     };
-    _this.renderChildren = _this.renderChildren.bind(_assertThisInitialized(_assertThisInitialized(_this))); // this.updateChildren = this.updateChildren.bind(this);
-
     return _this;
   }
 
@@ -102,58 +151,6 @@ function (_Component) {
     key: "componentDidMount",
     value: function componentDidMount() {
       this.renderChildren();
-    }
-  }, {
-    key: "renderChildren",
-    value: function renderChildren() {
-      var _this2 = this;
-
-      if (_react.default.Children.toArray(this.props.children).length < 4) {
-        var children = this.props.children;
-        var arr = [];
-        var displayChildren = [];
-
-        _react.default.Children.toArray(children).map(function (child, i) {
-          arr.push(_react.default.cloneElement(child, {
-            key: i,
-            num: i,
-            handleDown: _this2.handleDown,
-            handleUp: _this2.handleUp,
-            updateChildren: _this2.updateChildren,
-            handleOnSwipe: _this2.handleOnSwipe
-          }));
-        });
-
-        displayChildren = arr;
-        this.setState({
-          arr: arr,
-          children: this.props.children,
-          displayChildren: displayChildren
-        });
-      } else {
-        var _children = this.props.children.slice(0, this.props.children.length);
-
-        var _arr = [];
-        var _displayChildren = [];
-
-        _react.default.Children.toArray(_children).map(function (child, i) {
-          _arr.push(_react.default.cloneElement(child, {
-            key: i,
-            num: i,
-            handleDown: _this2.handleDown,
-            handleUp: _this2.handleUp,
-            updateChildren: _this2.updateChildren,
-            handleOnSwipe: _this2.handleOnSwipe
-          }));
-        });
-
-        _displayChildren = _arr.slice(this.props.children.length - this.state.maxElement, this.props.children.length);
-        this.setState({
-          arr: _arr,
-          children: this.props.children,
-          displayChildren: _displayChildren
-        });
-      }
     }
   }, {
     key: "render",
@@ -165,13 +162,13 @@ function (_Component) {
         overflow: "hidden"
       };
       var iconContainer = {
-        position: 'absolute',
-        left: '0px',
-        right: '0px',
-        marginLeft: 'auto',
-        marginRight: 'auto',
-        width: '350px',
-        bottom: '50px'
+        position: "absolute",
+        left: "0px",
+        right: "0px",
+        marginLeft: "auto",
+        marginRight: "auto",
+        width: "350px",
+        bottom: "50px"
       };
       var icon = {
         width: 0,
@@ -190,5 +187,11 @@ function (_Component) {
   return ReContainer;
 }(_react.Component);
 
+ReContainer.defaultProps = {
+  mass: 0.7,
+  damping: 0.8,
+  trigger: false,
+  max: 3
+};
 var _default = ReContainer;
 exports.default = _default;

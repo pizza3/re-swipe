@@ -25,17 +25,12 @@ class ReCard extends Component {
       mass: 0.7,
       damping: 0.8
     };
-    this.handleDown = this.handleDown.bind(this);
-    this.handleUp = this.handleUp.bind(this);
-    this.handleMove = this.handleMove.bind(this);
-    this.animate = this.animate.bind(this);
-    this.updateCard = this.updateCard.bind(this);
     this.f = { x: 0, y: 0 };
     this.a = { x: 0, y: 0 };
     this.v = { x: 0, y: 0 };
     this.Ref = React.createRef();
   }
-  handleDown(e) {
+  handleDown = e => {
     e.stopPropagation();
     e.preventDefault();
     e.persist();
@@ -51,8 +46,8 @@ class ReCard extends Component {
         mouseStartPosY: e.touches ? e.touches[0].screenY : e.clientY
       });
     }
-  }
-  handleMove(e) {
+  };
+  handleMove = e => {
     e.preventDefault();
     e.persist();
     const {
@@ -64,6 +59,7 @@ class ReCard extends Component {
       Posy
     } = this.state;
     const { left, right } = this.Ref.current.getBoundingClientRect();
+    const { parentElement } = this.Ref.current;
     if (!limit) {
       if (move) {
         // assign current mouse position
@@ -72,8 +68,7 @@ class ReCard extends Component {
         // distance between startPosition and newPosition
         let Posx = mouseCurrPosX - mouseStartPosX;
         let Posy = mouseCurrPosY - mouseStartPosY;
-        let height = window.innerHeight;
-        let width = window.innerWidth;
+        let width = parentElement.offsetWidth;
         let mouseRange = mouseCurrPosX;
         if (mouseRange < width / 2) {
           mouseRange = width - mouseRange;
@@ -81,7 +76,7 @@ class ReCard extends Component {
         let damping = map_range(
           mouseRange,
           width / 2,
-          width - (width * 10) / 100,
+          (width * 90) / 100,
           0.6,
           0.8
         );
@@ -98,7 +93,7 @@ class ReCard extends Component {
         if (mouseCurrPosX > (width * 80) / 100 || left > (width * 80) / 100) {
           let restX, restY;
           // this implementation for rest position x is still a hacky logic, not solid enough!
-          restX = window.innerWidth / 2 + this.props.height;
+          restX = parentElement.offsetWidth / 2 + this.props.height;
           restY = this.state.Posy * 5;
           let limit = true;
           let move = false;
@@ -118,7 +113,7 @@ class ReCard extends Component {
           right < (width * 20) / 100
         ) {
           let restX, restY;
-          restX = -window.innerWidth / 2 - this.props.height;
+          restX = -parentElement.offsetWidth / 2 - this.props.height;
           restY = this.state.Posy * 5;
           let limit = true;
           let move = false;
@@ -134,24 +129,25 @@ class ReCard extends Component {
         }
       }
     }
-  }
+  };
 
-  handleUp() {
+  handleUp = () => {
     this.setState({
       move: false
     });
-  }
+  };
 
   moveRight = () => {
     let restX, restY;
+    const { parentElement } = this.Ref.current;
     this.setState({
       move: true,
       active: true,
-      mouseStartPosX: window.innerWidth / 2,
-      mouseStartPosY: window.innerHeight / 2
+      mouseStartPosX: parentElement.offsetWidth / 2,
+      mouseStartPosY: parentElement.offsetHeight / 2
     });
-    restX = window.innerWidth * 5;
-    restY = window.innerHeight / 2;
+    restX = parentElement.offsetWidth * 5;
+    restY = parentElement.offsetHeight / 2;
     let limit = true;
     let move = false;
     let damping = 0.02;
@@ -166,14 +162,15 @@ class ReCard extends Component {
 
   moveLeft = () => {
     let restX, restY;
+    const { parentElement } = this.Ref.current.parentElement;
     this.setState({
       move: true,
       active: true,
-      mouseStartPosX: window.innerWidth / 2,
-      mouseStartPosY: window.innerHeight / 2
+      mouseStartPosX: parentElement.offsetWidth / 2,
+      mouseStartPosY: parentElement.offsetHeight / 2
     });
-    restX = -window.innerWidth * 5;
-    restY = window.innerHeight / 2;
+    restX = -parentElement.offsetWidth * 5;
+    restY = parentElement.offsetHeight / 2;
     let limit = true;
     let move = false;
     let damping = 0.02;
@@ -186,7 +183,7 @@ class ReCard extends Component {
     });
   };
 
-  updateCard() {
+  updateCard = () => {
     const { k, Posx, Posy, restX, restY, mass, damping } = this.state;
     if (!this.state.move) {
       // calculate the total force using spring constant f=-kx
@@ -204,12 +201,13 @@ class ReCard extends Component {
         Posy: Posy + this.v.y
       });
     }
-  }
+  };
 
-  animate() {
+  animate = () => {
     const { left, right } = this.Ref.current.getBoundingClientRect();
     // stop the raf loop and unmount the card from the container
-    const isRight = left > window.innerWidth;
+    const { offsetWidth } = this.Ref.current.parentElement;
+    const isRight = left > offsetWidth;
     const isLeft = right < 0;
     const swipeDirection = isLeft ? "left" : "right";
     if (isLeft || isRight) {
@@ -222,7 +220,7 @@ class ReCard extends Component {
     if (this.state.active) {
       this.updateCard();
     }
-  }
+  };
 
   render() {
     const { children, width, height } = this.props;
@@ -259,6 +257,8 @@ class ReCard extends Component {
       width: width + "px",
       height: height + "px",
       borderRadius: "18px",
+      background: "#eeeeee",
+      border: children.length ? "1px solid #cecece" : "none",
       boxShadow: move
         ? `0px 0px 31px -15px rgba(0,0,0,0.75)`
         : `0px 0px 31px -9px rgba(0,0,0,0.0)`,
@@ -282,5 +282,10 @@ class ReCard extends Component {
     );
   }
 }
+ReCard.defaultProps = {
+  width: 300,
+  height: 400,
+  metaData: {}
+};
 
 export default ReCard;

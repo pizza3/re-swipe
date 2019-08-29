@@ -16,15 +16,13 @@ class ReContainer extends Component {
       maxElement: 3,
       cardOnTop: 0
     };
-    this.renderChildren = this.renderChildren.bind(this);
-    // this.updateChildren = this.updateChildren.bind(this);
   }
 
   componentDidMount() {
     this.renderChildren();
   }
 
-  renderChildren() {
+  renderChildren = () => {
     if (React.Children.toArray(this.props.children).length < 4) {
       const children = this.props.children;
       let arr = [];
@@ -37,7 +35,7 @@ class ReContainer extends Component {
             handleDown: this.handleDown,
             handleUp: this.handleUp,
             updateChildren: this.updateChildren,
-            handleOnSwipe:this.handleOnSwipe
+            handleOnSwipe: this.handleOnSwipe
           })
         );
       });
@@ -59,7 +57,7 @@ class ReContainer extends Component {
             handleDown: this.handleDown,
             handleUp: this.handleUp,
             updateChildren: this.updateChildren,
-            handleOnSwipe:this.handleOnSwipe
+            handleOnSwipe: this.handleOnSwipe
           })
         );
       });
@@ -73,16 +71,16 @@ class ReContainer extends Component {
         displayChildren
       });
     }
-  }
-  
-  handleOnSwipe = (swipeDirection, metaData)=>{
-    const {onSwipe} = this.props
-    if(onSwipe !== undefined){
-      onSwipe(swipeDirection, metaData)
-    }
-  }
+  };
 
-  updateChildren=()=> {
+  handleOnSwipe = (swipeDirection, metaData) => {
+    const { onSwipe } = this.props;
+    if (onSwipe !== undefined) {
+      onSwipe(swipeDirection, metaData);
+    }
+  };
+
+  updateChildren = () => {
     let { arr, maxElement, displayChildren } = this.state;
     maxElement += 1;
     displayChildren.pop();
@@ -98,7 +96,7 @@ class ReContainer extends Component {
         maxElement
       });
     }
-  }
+  };
 
   render() {
     const style = {
@@ -108,34 +106,40 @@ class ReContainer extends Component {
       overflow: "hidden"
     };
     const iconContainer = {
-      position: 'absolute',
-      left: '0px',
-      right: '0px',
-      marginLeft: 'auto',
-      marginRight: 'auto',
-      width:'350px',
-      bottom: '50px'
-    }
+      position: "absolute",
+      left: "0px",
+      right: "0px",
+      marginLeft: "auto",
+      marginRight: "auto",
+      width: "350px",
+      bottom: "50px"
+    };
     const icon = {
       width: 0,
       margin: 0,
       padding: 0,
-      height: 0,
-    }
+      height: 0
+    };
     return (
       <>
-      <div style={style}>
-        <>
-          {this.state.displayChildren}
-        </>
-      </div>
-      <span style={iconContainer}>
-        {/* <div style={icon}>{Cross()}</div>
+        <div style={style}>
+          <>{this.state.displayChildren}</>
+        </div>
+        <span style={iconContainer}>
+          {/* <div style={icon}>{Cross()}</div>
         <div style={{...icon,float:'right'}}>{CheckMark()}</div> */}
-      </span>
+        </span>
       </>
     );
   }
 }
+
+ReContainer.defaultProps = {
+  mass: 0.7,
+  damping: 0.8,
+  trigger: false,
+  max: 3
+};
+
 
 export default ReContainer;

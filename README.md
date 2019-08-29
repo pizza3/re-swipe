@@ -48,10 +48,9 @@ class App extends Component{
 | ------------- |:-------------|:-----:|:-----|:-----|
 | mass          | Provide the mass for animation.            | float | 0.7 | 0.1 - 1 |
 | damping       | Provide the damping for animation.         | float | 0.8 | 0.1 - 2 |
-| width         | The width for parent container  | int      | 300 | -  | 
-| height        | The height for parent container | int      | 500 | -  |
-| onSwipe       | Callback function, executed when the card has been swiped.  | func() | - | - |
-| trigger       | shows Accept and Reject button when true | boolean | false | - |
+| onSwipe       | Callback function, executed when the card has been swiped. Takes 2 params `direction`- left or right & `metaData`-data of the swiped card  | func(direction:strin,metadata:object) | - | - |
+| trigger       | Shows Accept and Reject button when true | boolean | false | - |
+| max | Maximum number of Card component being rendered. For better performance it has been set to 3.| int | 3 | 3 - 10 |
 
 
 `<ReCard>`
@@ -66,10 +65,10 @@ class App extends Component{
 
 It consist of two components `<ReContainer/>` and the `<ReCard/>`, the `<ReContainer/>` component is used to keep track of each card component 
 being swipped left and right. By default the `<ReContainer/>` component only 
-render's 4 cards component only for better animation and performace. Each 
-`<Card/>` component has to be provided width a callback function which is
-used to return o the state of the card when swiped to the left or swiped
-to the right.
+render's 3 cards component only for better animation and performace. Each 
+`<Card/>` component has to be provided with a callback function which is
+used to return the state of the card when swiped towards left or swiped
+towards right.
 
 The `<ReContainer>` take's the `offset` prop which is by default set to 10,
 the `offset` will be used to check if the point of contact with a `<Card/>`
