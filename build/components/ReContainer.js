@@ -7,6 +7,8 @@ exports.default = void 0;
 
 var _react = _interopRequireWildcard(require("react"));
 
+var _icon = require("../assets/icon");
+
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
@@ -54,7 +56,8 @@ function (_Component) {
       damping: 0.8,
       arr: [],
       displayChildren: [],
-      maxElement: 4
+      maxElement: 3,
+      cardOnTop: 0
     };
     _this.renderChildren = _this.renderChildren.bind(_assertThisInitialized(_assertThisInitialized(_this)));
     _this.updateChildren = _this.updateChildren.bind(_assertThisInitialized(_assertThisInitialized(_this)));
@@ -143,14 +146,31 @@ function (_Component) {
     key: "render",
     value: function render() {
       var style = {
-        position: 'relative',
-        width: '100%',
-        height: '100%',
-        overflow: 'hidden'
+        position: "relative",
+        width: "100%",
+        height: "100%",
+        overflow: "hidden"
       };
-      return _react.default.createElement("div", {
+      var iconContainer = {
+        position: 'absolute',
+        left: '0px',
+        right: '0px',
+        marginLeft: 'auto',
+        marginRight: 'auto',
+        width: '350px',
+        bottom: '50px'
+      };
+      var icon = {
+        width: 0,
+        margin: 0,
+        padding: 0,
+        height: 0
+      };
+      return _react.default.createElement(_react.default.Fragment, null, _react.default.createElement("div", {
         style: style
-      }, this.state.displayChildren);
+      }, _react.default.createElement(_react.default.Fragment, null, this.state.displayChildren)), _react.default.createElement("span", {
+        style: iconContainer
+      }));
     }
   }]);
 

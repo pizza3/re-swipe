@@ -2,7 +2,7 @@
 
 ## Introduction
 
-re-swipe is a react component library emulating the UI card swipe as seen on applications such as tinder, this component provides the state track for each card, controls for physic's animation, dynamic trigger, and other feature's.
+re-swipe is a react component library emulating the UI card swipe as seen on applications such as tinder, this component provides the state track for each card, controls for physics of animation, dynamic trigger, and other feature's.
 
 <p align="left" >
   <img src="https://github.com/pizza3/asset/blob/master/Jan-22-2019%2000-54-20.gif?raw=true" height="auto" width="33.3%">
