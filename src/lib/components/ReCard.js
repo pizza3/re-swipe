@@ -258,7 +258,6 @@ class ReCard extends Component {
       height: height + "px",
       borderRadius: "18px",
       background: "#eeeeee",
-      border: children.length ? "1px solid #cecece" : "none",
       boxShadow: move
         ? `0px 0px 31px -15px rgba(0,0,0,0.75)`
         : `0px 0px 31px -9px rgba(0,0,0,0.0)`,

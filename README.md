@@ -18,24 +18,31 @@ npm install re-cardswipe --save
 ## Basic Usage
 
 ```js
-import React, { Component } from "react";
+import React from "react";
 import ReContainer, { ReCard } from "re-cardswipe";
 
-class App extends Component{
-    constructor(props){
-        super(props);
-        this.state={
-
+const App = () => {
+  const foo = [1, 2, 3, 4, 5]
+  const parentStyle = {
+    position:"relative",
+    width:"100%",
+    height:"100vh"
+  }
+  // NOTE: it is important to enclose <ReContainer/> component inside a parent div, being an absolute container it will inherit the parent dimensions (width & height).
+  return(
+    <div style={parentStyle}>
+      <ReContainer>
+        {foo.map((value, index) => {
+            return (
+              <ReCard key={index}>
+                {index+1}
+              </ReCard>
+            );
+          })
         }
-    }
-
-    render(){
-        return(
-            <ReContainer>
-                <ReCard></ReCard>
-            </ReContainer>
-        )
-    }
+      </ReContainer>
+    </div>
+  )
 }
 
 ```
@@ -82,5 +89,24 @@ component is under the offset area which will trigger the swipe mechanism.
 
 ## License
 
-MIT
+MIT License
 
+Copyright (c) 2019 Yugam Dhuriya
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE

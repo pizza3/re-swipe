@@ -333,7 +333,6 @@ function (_Component) {
         height: height + "px",
         borderRadius: "18px",
         background: "#eeeeee",
-        border: children.length ? "1px solid #cecece" : "none",
         boxShadow: move ? "0px 0px 31px -15px rgba(0,0,0,0.75)" : "0px 0px 31px -9px rgba(0,0,0,0.0)",
         transform: move ? "scale(1.1)" : "scale(1)",
         transition: " 0.4s cubic-bezier(0.19, 1, 0.22, 1)"
