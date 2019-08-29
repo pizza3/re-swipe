@@ -1,7 +1,4 @@
 # re-cardswipe
-
-## Introduction
-
 re-cardswipe is a react component library emulating the UI card swipe as seen on applications such as tinder, this library provides the state track for each card, controls for physics of animation, dynamic trigger, and other feature's.
 
 <p align="left" >
@@ -35,7 +32,7 @@ const App = () => {
         {foo.map((value, index) => {
             return (
               <ReCard key={index}>
-                {index+1}
+                {value}
               </ReCard>
             );
           })

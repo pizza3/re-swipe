@@ -99,8 +99,8 @@ class ReContainer extends Component {
           <>{this.state.displayChildren}</>
         </div>
         <span style={iconContainer}>
-          {/* <div style={icon}>{Cross()}</div>
-        <div style={{...icon,float:'right'}}>{CheckMark()}</div> */}
+          <div style={icon}>{Cross()}</div>
+        <div style={{...icon,float:'right'}}>{CheckMark()}</div>
         </span>
       </>
     );
