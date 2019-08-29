@@ -1,8 +1,8 @@
-# re-swipe
+# re-cardswipe
 
 ## Introduction
 
-re-swipe is a react component library emulating the UI card swipe as seen on applications such as tinder, this component provides the state track for each card, controls for physics of animation, dynamic trigger, and other feature's.
+re-cardswipe is a react component library emulating the UI card swipe as seen on applications such as tinder, this library provides the state track for each card, controls for physics of animation, dynamic trigger, and other feature's.
 
 <p align="left" >
   <img src="https://github.com/pizza3/asset/blob/master/Jan-22-2019%2000-54-20.gif?raw=true" height="auto" width="33.3%">
@@ -46,8 +46,8 @@ class App extends Component{
 
 | Prop          | Description   | Type  | Default Value | Expected Values |
 | ------------- |:-------------|:-----:|:-----|:-----|
-| mass          | Provide the mass for animation.            | Float | 0.7 | 0.1 - 1 |
-| damping       | Provide the damping for animation.         | Float | 0.8 | 0.1 - 2 |
+| mass          | Provide the mass for animation.            | float | 0.7 | 0.1 - 1 |
+| damping       | Provide the damping for animation.         | float | 0.8 | 0.1 - 2 |
 | width         | The width for parent container  | Int      | 300 | -  | 
 | height        | The height for parent container | Int      | 500 | -  |
 | onSwipe       | Callback function, executed when the card has been swiped.  | func() | - | - |
@@ -60,6 +60,7 @@ class App extends Component{
 | ------------- |:-------------|:-----:|:-----|
 | width         | Provide the width of the child component  | Int | 300 |
 | height        | Provide the height of the child component | Int | 400 |
+| metaData      | object recieved in `onSwipe()` the callback function, store any form of data related  to the specific card | object | {} |
 
 ## How does it work
 

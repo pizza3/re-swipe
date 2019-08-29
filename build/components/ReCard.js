@@ -284,8 +284,13 @@ function (_Component) {
           right = _this$Ref$current$get2.right; // stop the raf loop and unmount the card from the container
 
 
-      if (left > window.innerWidth || right < 0) {
+      var isRight = left > window.innerWidth;
+      var isLeft = right < 0;
+      var swipeDirection = isLeft ? 'left' : 'right';
+
+      if (isLeft || isRight) {
         cancelAnimationFrame(this._frameId);
+        this.props.handleOnSwipe(swipeDirection, this.props.metaData || {});
         this.props.updateChildren();
       } else {
         this._frameId = requestAnimationFrame(this.animate);

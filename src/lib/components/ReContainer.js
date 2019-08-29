@@ -17,7 +17,7 @@ class ReContainer extends Component {
       cardOnTop: 0
     };
     this.renderChildren = this.renderChildren.bind(this);
-    this.updateChildren = this.updateChildren.bind(this);
+    // this.updateChildren = this.updateChildren.bind(this);
   }
 
   componentDidMount() {
@@ -36,7 +36,8 @@ class ReContainer extends Component {
             num: i,
             handleDown: this.handleDown,
             handleUp: this.handleUp,
-            updateChildren: this.updateChildren
+            updateChildren: this.updateChildren,
+            handleOnSwipe:this.handleOnSwipe
           })
         );
       });
@@ -57,7 +58,8 @@ class ReContainer extends Component {
             num: i,
             handleDown: this.handleDown,
             handleUp: this.handleUp,
-            updateChildren: this.updateChildren
+            updateChildren: this.updateChildren,
+            handleOnSwipe:this.handleOnSwipe
           })
         );
       });
@@ -72,8 +74,15 @@ class ReContainer extends Component {
       });
     }
   }
+  
+  handleOnSwipe = (swipeDirection, metaData)=>{
+    const {onSwipe} = this.props
+    if(onSwipe !== undefined){
+      onSwipe(swipeDirection, metaData)
+    }
+  }
 
-  updateChildren() {
+  updateChildren=()=> {
     let { arr, maxElement, displayChildren } = this.state;
     maxElement += 1;
     displayChildren.pop();

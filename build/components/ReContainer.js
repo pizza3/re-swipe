@@ -29,6 +29,8 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 
 function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
 
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 var ReContainer =
 /*#__PURE__*/
 function (_Component) {
@@ -40,6 +42,38 @@ function (_Component) {
     _classCallCheck(this, ReContainer);
 
     _this = _possibleConstructorReturn(this, _getPrototypeOf(ReContainer).call(this, props));
+
+    _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "handleOnSwipe", function (swipeDirection, metaData) {
+      var onSwipe = _this.props.onSwipe;
+
+      if (onSwipe !== undefined) {
+        onSwipe(swipeDirection, metaData);
+      }
+    });
+
+    _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "updateChildren", function () {
+      var _this$state = _this.state,
+          arr = _this$state.arr,
+          maxElement = _this$state.maxElement,
+          displayChildren = _this$state.displayChildren;
+      maxElement += 1;
+      displayChildren.pop();
+
+      if (_this.props.children.length >= maxElement) {
+        displayChildren.unshift(arr[_this.props.children.length - maxElement]);
+
+        _this.setState({
+          displayChildren: displayChildren,
+          maxElement: maxElement
+        });
+      } else {
+        _this.setState({
+          displayChildren: displayChildren,
+          maxElement: maxElement
+        });
+      }
+    });
+
     _this.state = {
       move: false,
       current: 0,
@@ -59,8 +93,8 @@ function (_Component) {
       maxElement: 3,
       cardOnTop: 0
     };
-    _this.renderChildren = _this.renderChildren.bind(_assertThisInitialized(_assertThisInitialized(_this)));
-    _this.updateChildren = _this.updateChildren.bind(_assertThisInitialized(_assertThisInitialized(_this)));
+    _this.renderChildren = _this.renderChildren.bind(_assertThisInitialized(_assertThisInitialized(_this))); // this.updateChildren = this.updateChildren.bind(this);
+
     return _this;
   }
 
@@ -85,7 +119,8 @@ function (_Component) {
             num: i,
             handleDown: _this2.handleDown,
             handleUp: _this2.handleUp,
-            updateChildren: _this2.updateChildren
+            updateChildren: _this2.updateChildren,
+            handleOnSwipe: _this2.handleOnSwipe
           }));
         });
 
@@ -107,7 +142,8 @@ function (_Component) {
             num: i,
             handleDown: _this2.handleDown,
             handleUp: _this2.handleUp,
-            updateChildren: _this2.updateChildren
+            updateChildren: _this2.updateChildren,
+            handleOnSwipe: _this2.handleOnSwipe
           }));
         });
 
@@ -116,29 +152,6 @@ function (_Component) {
           arr: _arr,
           children: this.props.children,
           displayChildren: _displayChildren
-        });
-      }
-    }
-  }, {
-    key: "updateChildren",
-    value: function updateChildren() {
-      var _this$state = this.state,
-          arr = _this$state.arr,
-          maxElement = _this$state.maxElement,
-          displayChildren = _this$state.displayChildren;
-      maxElement += 1;
-      displayChildren.pop();
-
-      if (this.props.children.length >= maxElement) {
-        displayChildren.unshift(arr[this.props.children.length - maxElement]);
-        this.setState({
-          displayChildren: displayChildren,
-          maxElement: maxElement
-        });
-      } else {
-        this.setState({
-          displayChildren: displayChildren,
-          maxElement: maxElement
         });
       }
     }

@@ -214,8 +214,12 @@ class ReCard extends Component {
   animate() {
     const { left, right } = this.Ref.current.getBoundingClientRect();
     // stop the raf loop and unmount the card from the container
-    if (left > window.innerWidth || right < 0) {
+    const isRight = left > window.innerWidth
+    const isLeft = right < 0
+    const swipeDirection = isLeft?'left':'right'
+    if (isLeft || isRight) {
       cancelAnimationFrame(this._frameId);
+      this.props.handleOnSwipe(swipeDirection,this.props.metaData||{})
       this.props.updateChildren();
     } else {
       this._frameId = requestAnimationFrame(this.animate);
