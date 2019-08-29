@@ -4,17 +4,9 @@ class ReContainer extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      move: false,
-      current: 0,
-      clickPos: { x: 0, y: 0 },
-      pos: { x: 0, y: 0 },
-      k: 0.2,
-      mass: 0.7,
-      damping: 0.8,
       arr: [],
       displayChildren: [],
-      maxElement: 3,
-      cardOnTop: 0
+      maxElement: this.props.max,
     };
   }
 
@@ -23,59 +15,40 @@ class ReContainer extends Component {
   }
 
   renderChildren = () => {
-    if (React.Children.toArray(this.props.children).length < 4) {
-      const children = this.props.children;
-      let arr = [];
-      let displayChildren = [];
-      React.Children.toArray(children).map((child, i) => {
-        arr.push(
-          React.cloneElement(child, {
-            key: i,
-            num: i,
-            handleDown: this.handleDown,
-            handleUp: this.handleUp,
-            updateChildren: this.updateChildren,
-            handleOnSwipe: this.handleOnSwipe
-          })
-        );
+    const { children } = this.props;
+    let arr = this.createChildren(children);
+    let displayChildren = [];
+    // only adds maxElement children only
+    displayChildren = arr.slice(
+      children.length - this.state.maxElement,
+      children.length
+    );
+    this.setState({
+      arr: arr,
+      children: children,
+      displayChildren
+    });
+  };
+
+  // create each card component and pass down neccessary props
+  createChildren = children => {
+    return React.Children.toArray(children).map((child, i) => {
+      return React.cloneElement(child, {
+        key: i,
+        num: i,
+        mass: this.props.mass,
+        damping: this.props.damping,
+        handleDown: this.handleDown,
+        handleUp: this.handleUp,
+        updateChildren: this.updateChildren,
+        handleOnSwipe: this.handleOnSwipe
       });
-      displayChildren = arr;
-      this.setState({
-        arr: arr,
-        children: this.props.children,
-        displayChildren
-      });
-    } else {
-      const children = this.props.children.slice(0, this.props.children.length);
-      let arr = [];
-      let displayChildren = [];
-      React.Children.toArray(children).map((child, i) => {
-        arr.push(
-          React.cloneElement(child, {
-            key: i,
-            num: i,
-            handleDown: this.handleDown,
-            handleUp: this.handleUp,
-            updateChildren: this.updateChildren,
-            handleOnSwipe: this.handleOnSwipe
-          })
-        );
-      });
-      displayChildren = arr.slice(
-        this.props.children.length - this.state.maxElement,
-        this.props.children.length
-      );
-      this.setState({
-        arr: arr,
-        children: this.props.children,
-        displayChildren
-      });
-    }
+    });
   };
 
   handleOnSwipe = (swipeDirection, metaData) => {
     const { onSwipe } = this.props;
-    if (onSwipe !== undefined) {
+    if (onSwipe) {
       onSwipe(swipeDirection, metaData);
     }
   };
@@ -138,8 +111,8 @@ ReContainer.defaultProps = {
   mass: 0.7,
   damping: 0.8,
   trigger: false,
-  max: 3
+  max: 3,
+  onSwipe: undefined
 };
-
 
 export default ReContainer;

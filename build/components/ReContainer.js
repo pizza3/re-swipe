@@ -44,60 +44,40 @@ function (_Component) {
     _this = _possibleConstructorReturn(this, _getPrototypeOf(ReContainer).call(this, props));
 
     _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "renderChildren", function () {
-      if (_react.default.Children.toArray(_this.props.children).length < 4) {
-        var children = _this.props.children;
-        var arr = [];
-        var displayChildren = [];
+      var children = _this.props.children;
 
-        _react.default.Children.toArray(children).map(function (child, i) {
-          arr.push(_react.default.cloneElement(child, {
-            key: i,
-            num: i,
-            handleDown: _this.handleDown,
-            handleUp: _this.handleUp,
-            updateChildren: _this.updateChildren,
-            handleOnSwipe: _this.handleOnSwipe
-          }));
+      var arr = _this.createChildren(children);
+
+      var displayChildren = []; // only adds maxElement children only
+
+      displayChildren = arr.slice(children.length - _this.state.maxElement, children.length);
+
+      _this.setState({
+        arr: arr,
+        children: children,
+        displayChildren: displayChildren
+      });
+    });
+
+    _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "createChildren", function (children) {
+      return _react.default.Children.toArray(children).map(function (child, i) {
+        return _react.default.cloneElement(child, {
+          key: i,
+          num: i,
+          mass: _this.props.mass,
+          damping: _this.props.damping,
+          handleDown: _this.handleDown,
+          handleUp: _this.handleUp,
+          updateChildren: _this.updateChildren,
+          handleOnSwipe: _this.handleOnSwipe
         });
-
-        displayChildren = arr;
-
-        _this.setState({
-          arr: arr,
-          children: _this.props.children,
-          displayChildren: displayChildren
-        });
-      } else {
-        var _children = _this.props.children.slice(0, _this.props.children.length);
-
-        var _arr = [];
-        var _displayChildren = [];
-
-        _react.default.Children.toArray(_children).map(function (child, i) {
-          _arr.push(_react.default.cloneElement(child, {
-            key: i,
-            num: i,
-            handleDown: _this.handleDown,
-            handleUp: _this.handleUp,
-            updateChildren: _this.updateChildren,
-            handleOnSwipe: _this.handleOnSwipe
-          }));
-        });
-
-        _displayChildren = _arr.slice(_this.props.children.length - _this.state.maxElement, _this.props.children.length);
-
-        _this.setState({
-          arr: _arr,
-          children: _this.props.children,
-          displayChildren: _displayChildren
-        });
-      }
+      });
     });
 
     _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "handleOnSwipe", function (swipeDirection, metaData) {
       var onSwipe = _this.props.onSwipe;
 
-      if (onSwipe !== undefined) {
+      if (onSwipe) {
         onSwipe(swipeDirection, metaData);
       }
     });
@@ -126,23 +106,9 @@ function (_Component) {
     });
 
     _this.state = {
-      move: false,
-      current: 0,
-      clickPos: {
-        x: 0,
-        y: 0
-      },
-      pos: {
-        x: 0,
-        y: 0
-      },
-      k: 0.2,
-      mass: 0.7,
-      damping: 0.8,
       arr: [],
       displayChildren: [],
-      maxElement: 3,
-      cardOnTop: 0
+      maxElement: _this.props.max
     };
     return _this;
   }
@@ -191,7 +157,8 @@ ReContainer.defaultProps = {
   mass: 0.7,
   damping: 0.8,
   trigger: false,
-  max: 3
+  max: 3,
+  onSwipe: undefined
 };
 var _default = ReContainer;
 exports.default = _default;

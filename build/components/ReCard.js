@@ -279,8 +279,8 @@ function (_Component) {
       k: 0.2,
       restX: 0,
       restY: 0,
-      mass: 0.7,
-      damping: 0.8
+      mass: _this.props.mass,
+      damping: _this.props.damping
     };
     _this.f = {
       x: 0,

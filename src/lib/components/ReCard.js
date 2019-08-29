@@ -22,8 +22,8 @@ class ReCard extends Component {
       k: 0.2,
       restX: 0,
       restY: 0,
-      mass: 0.7,
-      damping: 0.8
+      mass: this.props.mass,
+      damping: this.props.damping
     };
     this.f = { x: 0, y: 0 };
     this.a = { x: 0, y: 0 };
