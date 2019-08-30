@@ -7,7 +7,9 @@ class ReContainer extends Component {
       arr: [],
       displayChildren: [],
       maxElement: this.props.max,
+      activeCard: 0
     };
+    this.child = React.createRef();
   }
 
   componentDidMount() {
@@ -16,21 +18,23 @@ class ReContainer extends Component {
 
   renderChildren = () => {
     const { children } = this.props;
-    let arr = this.createChildren(children);
+    const arr = this.createChildren(children);
     let displayChildren = [];
     // only adds maxElement children only
     displayChildren = arr.slice(
       children.length - this.state.maxElement,
       children.length
     );
+    displayChildren[displayChildren.length-1] = React.cloneElement(displayChildren[displayChildren.length-1], {ref:this.child}) 
     this.setState({
       arr: arr,
       children: children,
-      displayChildren
+      displayChildren,
+      activeCard:arr.length-1
     });
   };
 
-  // create each card component and pass down neccessary props
+  // create each card component and pass down the neccessary props
   createChildren = children => {
     return React.Children.toArray(children).map((child, i) => {
       return React.cloneElement(child, {
@@ -38,13 +42,19 @@ class ReContainer extends Component {
         num: i,
         mass: this.props.mass,
         damping: this.props.damping,
-        handleDown: this.handleDown,
-        handleUp: this.handleUp,
         updateChildren: this.updateChildren,
-        handleOnSwipe: this.handleOnSwipe
+        handleOnSwipe: this.handleOnSwipe,
+        updateActive: this.updateActive
       });
     });
   };
+
+  updateActive = () => {
+    const { activeCard, } = this.state
+    this.setState({
+      activeCard:activeCard-1
+    })
+  }
 
   handleOnSwipe = (swipeDirection, metaData) => {
     const { onSwipe } = this.props;
@@ -59,6 +69,7 @@ class ReContainer extends Component {
     displayChildren.pop();
     if (this.props.children.length >= maxElement) {
       displayChildren.unshift(arr[this.props.children.length - maxElement]);
+      displayChildren[displayChildren.length-1] = React.cloneElement(displayChildren[displayChildren.length-1], {ref:this.child, rand:'nom'})       
       this.setState({
         displayChildren,
         maxElement
@@ -69,9 +80,15 @@ class ReContainer extends Component {
         maxElement
       });
     }
-  };
+  }
+
+  handleTrigger=(direction)=>{    
+    this.child.current.trigger(this.state.activeCard,direction)
+    this.updateActive()
+  }
 
   render() {
+    const { trigger } = this.props
     const style = {
       position: "relative",
       width: "100%",
@@ -87,21 +104,22 @@ class ReContainer extends Component {
       width: "350px",
       bottom: "50px"
     };
-    const icon = {
-      width: 0,
-      margin: 0,
-      padding: 0,
-      height: 0
+    const defaultIcon = {
+      border: 'none',
+      background:'transparent'
     };
     return (
       <>
         <div style={style}>
-          <>{this.state.displayChildren}</>
+          {this.state.displayChildren}
         </div>
-        <span style={iconContainer}>
-          <div style={icon}>{Cross()}</div>
-        <div style={{...icon,float:'right'}}>{CheckMark()}</div>
-        </span>
+        {trigger?
+          <span style={iconContainer}>
+            <button style={defaultIcon} onClick={()=>{this.handleTrigger('left')}}>{Cross()}</button>
+            <button style={{...defaultIcon,float:'right'}} onClick={()=>{this.handleTrigger('right')}}>{CheckMark()}</button>
+          </span>
+          :null
+        }
       </>
     );
   }
@@ -111,7 +129,7 @@ ReContainer.defaultProps = {
   mass: 0.7,
   damping: 0.8,
   trigger: false,
-  max: 3,
+  max: 5,
   onSwipe: undefined
 };
 

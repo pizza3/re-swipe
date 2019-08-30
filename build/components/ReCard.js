@@ -158,30 +158,39 @@ function (_Component) {
       });
     });
 
-    _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "moveRight", function () {
-      var restX, restY;
-      var parentElement = _this.Ref.current.parentElement;
+    _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "trigger", function (activeCard, direction) {
+      var active = _this.state.active;
+      var num = _this.props.num;
 
-      _this.setState({
-        move: true,
-        active: true,
-        mouseStartPosX: parentElement.offsetWidth / 2,
-        mouseStartPosY: parentElement.offsetHeight / 2
-      });
+      if (num === activeCard) {
+        if (!active) {
+          _this.animate();
+        }
 
-      restX = parentElement.offsetWidth * 5;
-      restY = parentElement.offsetHeight / 2;
-      var limit = true;
-      var move = false;
-      var damping = 0.02;
+        var restX, restY;
+        var parentElement = _this.Ref.current.parentElement;
 
-      _this.setState({
-        restX: restX,
-        restY: restY,
-        limit: limit,
-        move: move,
-        damping: damping
-      });
+        _this.setState({
+          move: true,
+          active: true,
+          mouseStartPosX: parentElement.offsetWidth / 2,
+          mouseStartPosY: parentElement.offsetHeight / 2
+        });
+
+        restX = direction === 'right' ? parentElement.offsetWidth * 5 : -parentElement.offsetWidth * 5;
+        restY = parentElement.offsetHeight / 2;
+        var limit = true;
+        var move = false;
+        var damping = 0.02;
+
+        _this.setState({
+          restX: restX,
+          restY: restY,
+          limit: limit,
+          move: move,
+          damping: damping
+        });
+      }
     });
 
     _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "moveLeft", function () {
@@ -253,6 +262,8 @@ function (_Component) {
         cancelAnimationFrame(_this._frameId);
 
         _this.props.handleOnSwipe(swipeDirection, _this.props.metaData || {});
+
+        _this.props.updateActive();
 
         _this.props.updateChildren();
       } else {
@@ -346,7 +357,8 @@ function (_Component) {
         onMouseLeave: this.handleUp,
         onTouchStart: this.handleDown,
         onTouchMove: this.handleMove,
-        onTouchEnd: this.handleUp
+        onTouchEnd: this.handleUp,
+        "data-num": this.props.num
       }, _react.default.createElement("div", {
         style: shadow
       }, children));

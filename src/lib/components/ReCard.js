@@ -44,8 +44,9 @@ class ReCard extends Component {
         active: true,
         mouseStartPosX: e.touches ? e.touches[0].screenX : e.clientX,
         mouseStartPosY: e.touches ? e.touches[0].screenY : e.clientY
-      });
+      });      
     }
+
   };
   handleMove = e => {
     e.preventDefault();
@@ -137,27 +138,34 @@ class ReCard extends Component {
     });
   };
 
-  moveRight = () => {
-    let restX, restY;
-    const { parentElement } = this.Ref.current;
-    this.setState({
-      move: true,
-      active: true,
-      mouseStartPosX: parentElement.offsetWidth / 2,
-      mouseStartPosY: parentElement.offsetHeight / 2
-    });
-    restX = parentElement.offsetWidth * 5;
-    restY = parentElement.offsetHeight / 2;
-    let limit = true;
-    let move = false;
-    let damping = 0.02;
-    this.setState({
-      restX,
-      restY,
-      limit,
-      move,
-      damping
-    });
+  trigger = (activeCard, direction) => {
+    const { active } = this.state;
+    const { num } = this.props
+    if(num===activeCard){
+      if (!active) {
+        this.animate();
+      }
+      let restX, restY;
+      const { parentElement } = this.Ref.current;
+      this.setState({
+        move: true,
+        active: true,
+        mouseStartPosX: parentElement.offsetWidth / 2,
+        mouseStartPosY: parentElement.offsetHeight / 2
+      });
+      restX = direction==='right'?parentElement.offsetWidth * 5:-parentElement.offsetWidth * 5;
+      restY = parentElement.offsetHeight / 2;
+      let limit = true;
+      let move = false;
+      let damping = 0.02;
+      this.setState({
+        restX,
+        restY,
+        limit,
+        move,
+        damping
+      });
+    }
   };
 
   moveLeft = () => {
@@ -169,7 +177,7 @@ class ReCard extends Component {
       mouseStartPosX: parentElement.offsetWidth / 2,
       mouseStartPosY: parentElement.offsetHeight / 2
     });
-    restX = -parentElement.offsetWidth * 5;
+    restX = - parentElement.offsetWidth * 5;
     restY = parentElement.offsetHeight / 2;
     let limit = true;
     let move = false;
@@ -213,6 +221,7 @@ class ReCard extends Component {
     if (isLeft || isRight) {
       cancelAnimationFrame(this._frameId);
       this.props.handleOnSwipe(swipeDirection, this.props.metaData || {});
+      this.props.updateActive()
       this.props.updateChildren();
     } else {
       this._frameId = requestAnimationFrame(this.animate);
@@ -275,6 +284,7 @@ class ReCard extends Component {
         onTouchStart={this.handleDown}
         onTouchMove={this.handleMove}
         onTouchEnd={this.handleUp}
+        data-num={this.props.num}
       >
         <div style={shadow}>{children}</div>
       </div>
