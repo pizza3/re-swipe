@@ -4,7 +4,7 @@
     "description": "",
     "main": "build/index.js",
     "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1",
+		"test": "jest",
         "lib": "babel src/lib -d build --copy-files",
         "lib:watch": "babel src/lib -w -d build --copy-files"
     },
@@ -25,6 +25,10 @@
         "@babel/preset-env": "^7.1.6",
         "@babel/preset-react": "^7.0.0",
         "babel-plugin-transform-class-properties": "^6.24.1",
+        "enzyme": "^3.10.0",
+        "enzyme-adapter-react-16": "^1.14.0",
+        "enzyme-to-json": "^3.4.0",
+        "jest": "^24.9.0",
         "react": "^16.6.3",
         "react-dom": "^16.6.3"
     },
