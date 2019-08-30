@@ -4,6 +4,10 @@ const map_range = (value, low1, high1, low2, high2) => {
   return low2 + ((high2 - low2) * (value - low1)) / (high1 - low1);
 };
 
+const getRandomInt = max => {
+  return Math.floor(Math.random() * Math.floor(max));
+};
+
 class ReCard extends Component {
   constructor(props) {
     super(props);
@@ -44,9 +48,8 @@ class ReCard extends Component {
         active: true,
         mouseStartPosX: e.touches ? e.touches[0].screenX : e.clientX,
         mouseStartPosY: e.touches ? e.touches[0].screenY : e.clientY
-      });      
+      });
     }
-
   };
   handleMove = e => {
     e.preventDefault();
@@ -140,45 +143,23 @@ class ReCard extends Component {
 
   trigger = (activeCard, direction) => {
     const { active } = this.state;
-    const { num } = this.props
-    if(num===activeCard){
-      if (!active) {
-        this.animate();
-      }
-      let restX, restY;
-      const { parentElement } = this.Ref.current;
-      this.setState({
-        move: true,
-        active: true,
-        mouseStartPosX: parentElement.offsetWidth / 2,
-        mouseStartPosY: parentElement.offsetHeight / 2
-      });
-      restX = direction==='right'?parentElement.offsetWidth * 5:-parentElement.offsetWidth * 5;
-      restY = parentElement.offsetHeight / 2;
-      let limit = true;
-      let move = false;
-      let damping = 0.02;
-      this.setState({
-        restX,
-        restY,
-        limit,
-        move,
-        damping
-      });
+    const { num } = this.props;
+    if (!active) {
+      this.animate();
     }
-  };
-
-  moveLeft = () => {
     let restX, restY;
-    const { parentElement } = this.Ref.current.parentElement;
+    const { parentElement } = this.Ref.current;
     this.setState({
       move: true,
       active: true,
       mouseStartPosX: parentElement.offsetWidth / 2,
       mouseStartPosY: parentElement.offsetHeight / 2
     });
-    restX = - parentElement.offsetWidth * 5;
-    restY = parentElement.offsetHeight / 2;
+    restX =
+      direction === "right"
+        ? parentElement.offsetWidth * 5
+        : -parentElement.offsetWidth * 5;
+    restY = getRandomInt(parentElement.offsetHeight);    
     let limit = true;
     let move = false;
     let damping = 0.02;
@@ -221,7 +202,7 @@ class ReCard extends Component {
     if (isLeft || isRight) {
       cancelAnimationFrame(this._frameId);
       this.props.handleOnSwipe(swipeDirection, this.props.metaData || {});
-      this.props.updateActive()
+      this.props.updateActive();
       this.props.updateChildren();
     } else {
       this._frameId = requestAnimationFrame(this.animate);
@@ -268,7 +249,7 @@ class ReCard extends Component {
       borderRadius: "18px",
       background: "#eeeeee",
       boxShadow: move
-        ? `0px 0px 31px -15px rgba(0,0,0,0.75)`
+        ? `0px 0px 31px -11px rgba(0,0,0,0.65)`
         : `0px 0px 31px -9px rgba(0,0,0,0.0)`,
       transform: move ? `scale(1.1)` : `scale(1)`,
       transition: " 0.4s cubic-bezier(0.19, 1, 0.22, 1)"

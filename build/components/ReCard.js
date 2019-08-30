@@ -33,6 +33,10 @@ var map_range = function map_range(value, low1, high1, low2, high2) {
   return low2 + (high2 - low2) * (value - low1) / (high1 - low1);
 };
 
+var getRandomInt = function getRandomInt(max) {
+  return Math.floor(Math.random() * Math.floor(max));
+};
+
 var ReCard =
 /*#__PURE__*/
 function (_Component) {
@@ -162,40 +166,12 @@ function (_Component) {
       var active = _this.state.active;
       var num = _this.props.num;
 
-      if (num === activeCard) {
-        if (!active) {
-          _this.animate();
-        }
-
-        var restX, restY;
-        var parentElement = _this.Ref.current.parentElement;
-
-        _this.setState({
-          move: true,
-          active: true,
-          mouseStartPosX: parentElement.offsetWidth / 2,
-          mouseStartPosY: parentElement.offsetHeight / 2
-        });
-
-        restX = direction === 'right' ? parentElement.offsetWidth * 5 : -parentElement.offsetWidth * 5;
-        restY = parentElement.offsetHeight / 2;
-        var limit = true;
-        var move = false;
-        var damping = 0.02;
-
-        _this.setState({
-          restX: restX,
-          restY: restY,
-          limit: limit,
-          move: move,
-          damping: damping
-        });
+      if (!active) {
+        _this.animate();
       }
-    });
 
-    _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "moveLeft", function () {
       var restX, restY;
-      var parentElement = _this.Ref.current.parentElement.parentElement;
+      var parentElement = _this.Ref.current.parentElement;
 
       _this.setState({
         move: true,
@@ -204,8 +180,8 @@ function (_Component) {
         mouseStartPosY: parentElement.offsetHeight / 2
       });
 
-      restX = -parentElement.offsetWidth * 5;
-      restY = parentElement.offsetHeight / 2;
+      restX = direction === "right" ? parentElement.offsetWidth * 5 : -parentElement.offsetWidth * 5;
+      restY = getRandomInt(parentElement.offsetHeight);
       var limit = true;
       var move = false;
       var damping = 0.02;
@@ -344,7 +320,7 @@ function (_Component) {
         height: height + "px",
         borderRadius: "18px",
         background: "#eeeeee",
-        boxShadow: move ? "0px 0px 31px -15px rgba(0,0,0,0.75)" : "0px 0px 31px -9px rgba(0,0,0,0.0)",
+        boxShadow: move ? "0px 0px 31px -11px rgba(0,0,0,0.65)" : "0px 0px 31px -9px rgba(0,0,0,0.0)",
         transform: move ? "scale(1.1)" : "scale(1)",
         transition: " 0.4s cubic-bezier(0.19, 1, 0.22, 1)"
       };

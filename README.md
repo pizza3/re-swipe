@@ -3,7 +3,7 @@ re-cardswipe is a react component library emulating the UI card swipe as seen on
 
 |Basic| Its Over 9000   | Using Trigger  |
 |:-----:|:-----:|:-----:|
-|<img src="https://github.com/pizza3/asset/blob/master/Jan-22-2019%2000-54-20.gif?raw=true" height="auto" width="100%">|    <img src="https://github.com/pizza3/asset/blob/master/Jan-22-2019%2009-48-47.gif?raw=true" height="auto" width="100%">
+|<img src="https://raw.githubusercontent.com/pizza3/asset/master/demo1.gif" height="auto" width="100%">|    <img src="https://raw.githubusercontent.com/pizza3/asset/master/demo2.gif" height="auto" width="100%"> |   <img src="https://raw.githubusercontent.com/pizza3/asset/master/demo3.gif" height="auto" width="100%"> |
 
 
 ## Installation

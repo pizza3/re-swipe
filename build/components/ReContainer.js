@@ -106,8 +106,7 @@ function (_Component) {
       if (_this.props.children.length >= maxElement) {
         displayChildren.unshift(arr[_this.props.children.length - maxElement]);
         displayChildren[displayChildren.length - 1] = _react.default.cloneElement(displayChildren[displayChildren.length - 1], {
-          ref: _this.child,
-          rand: 'nom'
+          ref: _this.child
         });
 
         _this.setState({
@@ -115,6 +114,12 @@ function (_Component) {
           maxElement: maxElement
         });
       } else {
+        if (displayChildren.length) {
+          displayChildren[displayChildren.length - 1] = _react.default.cloneElement(displayChildren[displayChildren.length - 1], {
+            ref: _this.child
+          });
+        }
+
         _this.setState({
           displayChildren: displayChildren,
           maxElement: maxElement
@@ -124,8 +129,6 @@ function (_Component) {
 
     _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "handleTrigger", function (direction) {
       _this.child.current.trigger(_this.state.activeCard, direction);
-
-      _this.updateActive();
     });
 
     _this.state = {

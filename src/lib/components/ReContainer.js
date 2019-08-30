@@ -69,12 +69,15 @@ class ReContainer extends Component {
     displayChildren.pop();
     if (this.props.children.length >= maxElement) {
       displayChildren.unshift(arr[this.props.children.length - maxElement]);
-      displayChildren[displayChildren.length-1] = React.cloneElement(displayChildren[displayChildren.length-1], {ref:this.child, rand:'nom'})       
+      displayChildren[displayChildren.length-1] = React.cloneElement(displayChildren[displayChildren.length-1], {ref:this.child})       
       this.setState({
         displayChildren,
         maxElement
       });
     } else {
+      if(displayChildren.length){
+        displayChildren[displayChildren.length-1] = React.cloneElement(displayChildren[displayChildren.length-1], {ref:this.child})       
+      }
       this.setState({
         displayChildren,
         maxElement
@@ -82,9 +85,8 @@ class ReContainer extends Component {
     }
   }
 
-  handleTrigger=(direction)=>{    
+  handleTrigger=(direction)=>{        
     this.child.current.trigger(this.state.activeCard,direction)
-    this.updateActive()
   }
 
   render() {
