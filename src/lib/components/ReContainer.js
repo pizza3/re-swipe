@@ -4,10 +4,10 @@ class ReContainer extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      arr: [],
+      allChildren: [],
       displayChildren: [],
       maxElement: this.props.max,
-      activeCard: 0
+      activeCardIndex: 0
     };
     this.child = React.createRef();
   }
@@ -18,19 +18,19 @@ class ReContainer extends Component {
 
   renderChildren = () => {
     const { children } = this.props;
-    const arr = this.createChildren(children);
+    const allChildren = this.createChildren(children);
     let displayChildren = [];
-    // only adds maxElement children only
-    displayChildren = arr.slice(
+    let activeCardIndex = allChildren.length-1
+    // only adds maxElement children only, default is 3
+    displayChildren = allChildren.slice(
       children.length - this.state.maxElement,
       children.length
     );
     displayChildren[displayChildren.length-1] = React.cloneElement(displayChildren[displayChildren.length-1], {ref:this.child}) 
     this.setState({
-      arr: arr,
-      children: children,
+      allChildren,
       displayChildren,
-      activeCard:arr.length-1
+      activeCardIndex
     });
   };
 
@@ -50,9 +50,9 @@ class ReContainer extends Component {
   };
 
   updateActive = () => {
-    const { activeCard, } = this.state
+    const { activeCardIndex } = this.state    
     this.setState({
-      activeCard:activeCard-1
+      activeCardIndex:activeCardIndex-1
     })
   }
 
@@ -64,11 +64,11 @@ class ReContainer extends Component {
   };
 
   updateChildren = () => {
-    let { arr, maxElement, displayChildren } = this.state;
+    let { allChildren, maxElement, displayChildren } = this.state;
     maxElement += 1;
     displayChildren.pop();
     if (this.props.children.length >= maxElement) {
-      displayChildren.unshift(arr[this.props.children.length - maxElement]);
+      displayChildren.unshift(allChildren[this.props.children.length - maxElement]);
       displayChildren[displayChildren.length-1] = React.cloneElement(displayChildren[displayChildren.length-1], {ref:this.child})       
       this.setState({
         displayChildren,
@@ -85,8 +85,8 @@ class ReContainer extends Component {
     }
   }
 
-  handleTrigger=(direction)=>{        
-    this.child.current.trigger(this.state.activeCard,direction)
+  handleTrigger = (direction) => {            
+    this.child.current.trigger(direction)
   }
 
   render() {
@@ -131,7 +131,7 @@ ReContainer.defaultProps = {
   mass: 0.7,
   damping: 0.8,
   trigger: false,
-  max: 5,
+  max: 3,
   onSwipe: undefined
 };
 

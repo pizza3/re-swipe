@@ -12,8 +12,8 @@ class ReCard extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      active: false,
-      triggerDown: true,
+      active: false, // checks if the card is on top, if set true raf loop will be executed
+      triggerDown: true, // will be used to disable the onMouseDown
       move: false,
       limit: false,
       out: false,
@@ -134,36 +134,28 @@ class ReCard extends Component {
       }
     }
   };
-
   handleUp = () => {
     this.setState({
       move: false
     });
   };
-
-  trigger = (activeCard, direction) => {
+  trigger = direction => {    
     const { active } = this.state;
-    const { num } = this.props;
-    if (!active) {
-      this.animate();
-    }
-    let restX, restY;
     const { parentElement } = this.Ref.current;
-    this.setState({
-      move: true,
-      active: true,
-      mouseStartPosX: parentElement.offsetWidth / 2,
-      mouseStartPosY: parentElement.offsetHeight / 2
-    });
-    restX =
+    if (!active) this.animate();
+    let restX =
       direction === "right"
         ? parentElement.offsetWidth * 5
         : -parentElement.offsetWidth * 5;
-    restY = getRandomInt(parentElement.offsetHeight);    
+    let restY = getRandomInt(parentElement.offsetHeight);
     let limit = true;
     let move = false;
     let damping = 0.02;
     this.setState({
+      move: true,
+      active: true,
+      mouseStartPosX: parentElement.offsetWidth / 2,
+      mouseStartPosY: parentElement.offsetHeight / 2,
       restX,
       restY,
       limit,
@@ -171,7 +163,6 @@ class ReCard extends Component {
       damping
     });
   };
-
   updateCard = () => {
     const { k, Posx, Posy, restX, restY, mass, damping } = this.state;
     if (!this.state.move) {
@@ -191,29 +182,34 @@ class ReCard extends Component {
       });
     }
   };
-
   animate = () => {
     const { left, right } = this.Ref.current.getBoundingClientRect();
-    // stop the raf loop and unmount the card from the container
     const { offsetWidth } = this.Ref.current.parentElement;
+    const {
+      handleOnSwipe,
+      updateActive,
+      updateChildren,
+      metaData
+    } = this.props;
+    const { active } = this.state;    
     const isRight = left > offsetWidth;
     const isLeft = right < 0;
     const swipeDirection = isLeft ? "left" : "right";
+    // stop the raf loop and unmount the card from the container    
     if (isLeft || isRight) {
       cancelAnimationFrame(this._frameId);
-      this.props.handleOnSwipe(swipeDirection, this.props.metaData || {});
-      this.props.updateActive();
-      this.props.updateChildren();
+      handleOnSwipe(swipeDirection, metaData || {});
+      updateActive();
+      updateChildren();
     } else {
       this._frameId = requestAnimationFrame(this.animate);
     }
-    if (this.state.active) {
+    if (active) {
       this.updateCard();
     }
   };
-
   render() {
-    const { children, width, height } = this.props;
+    const { children, width, height, num } = this.props;
     const { move, Posx, Posy } = this.state;
     const style = {
       position: "absolute",
@@ -265,7 +261,7 @@ class ReCard extends Component {
         onTouchStart={this.handleDown}
         onTouchMove={this.handleMove}
         onTouchEnd={this.handleUp}
-        data-num={this.props.num}
+        data-num={num}
       >
         <div style={shadow}>{children}</div>
       </div>

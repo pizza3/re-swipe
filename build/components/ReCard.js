@@ -162,37 +162,27 @@ function (_Component) {
       });
     });
 
-    _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "trigger", function (activeCard, direction) {
+    _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "trigger", function (direction) {
+      var _this$setState;
+
       var active = _this.state.active;
-      var num = _this.props.num;
-
-      if (!active) {
-        _this.animate();
-      }
-
-      var restX, restY;
       var parentElement = _this.Ref.current.parentElement;
-
-      _this.setState({
-        move: true,
-        active: true,
-        mouseStartPosX: parentElement.offsetWidth / 2,
-        mouseStartPosY: parentElement.offsetHeight / 2
-      });
-
-      restX = direction === "right" ? parentElement.offsetWidth * 5 : -parentElement.offsetWidth * 5;
-      restY = getRandomInt(parentElement.offsetHeight);
+      if (!active) _this.animate();
+      var restX = direction === "right" ? parentElement.offsetWidth * 5 : -parentElement.offsetWidth * 5;
+      var restY = getRandomInt(parentElement.offsetHeight);
       var limit = true;
       var move = false;
       var damping = 0.02;
 
-      _this.setState({
+      _this.setState((_this$setState = {
+        move: true,
+        active: true,
+        mouseStartPosX: parentElement.offsetWidth / 2,
+        mouseStartPosY: parentElement.offsetHeight / 2,
         restX: restX,
         restY: restY,
-        limit: limit,
-        move: move,
-        damping: damping
-      });
+        limit: limit
+      }, _defineProperty(_this$setState, "move", move), _defineProperty(_this$setState, "damping", damping), _this$setState));
     });
 
     _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "updateCard", function () {
@@ -226,34 +216,38 @@ function (_Component) {
     _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "animate", function () {
       var _this$Ref$current$get2 = _this.Ref.current.getBoundingClientRect(),
           left = _this$Ref$current$get2.left,
-          right = _this$Ref$current$get2.right; // stop the raf loop and unmount the card from the container
-
+          right = _this$Ref$current$get2.right;
 
       var offsetWidth = _this.Ref.current.parentElement.offsetWidth;
+      var _this$props = _this.props,
+          handleOnSwipe = _this$props.handleOnSwipe,
+          updateActive = _this$props.updateActive,
+          updateChildren = _this$props.updateChildren,
+          metaData = _this$props.metaData;
+      var active = _this.state.active;
       var isRight = left > offsetWidth;
       var isLeft = right < 0;
-      var swipeDirection = isLeft ? "left" : "right";
+      var swipeDirection = isLeft ? "left" : "right"; // stop the raf loop and unmount the card from the container    
 
       if (isLeft || isRight) {
         cancelAnimationFrame(_this._frameId);
-
-        _this.props.handleOnSwipe(swipeDirection, _this.props.metaData || {});
-
-        _this.props.updateActive();
-
-        _this.props.updateChildren();
+        handleOnSwipe(swipeDirection, metaData || {});
+        updateActive();
+        updateChildren();
       } else {
         _this._frameId = requestAnimationFrame(_this.animate);
       }
 
-      if (_this.state.active) {
+      if (active) {
         _this.updateCard();
       }
     });
 
     _this.state = {
       active: false,
+      // checks if the card is on top, if set true raf loop will be executed
       triggerDown: true,
+      // will be used to disable the onMouseDown
       move: false,
       limit: false,
       out: false,
@@ -288,10 +282,11 @@ function (_Component) {
   _createClass(ReCard, [{
     key: "render",
     value: function render() {
-      var _this$props = this.props,
-          children = _this$props.children,
-          width = _this$props.width,
-          height = _this$props.height;
+      var _this$props2 = this.props,
+          children = _this$props2.children,
+          width = _this$props2.width,
+          height = _this$props2.height,
+          num = _this$props2.num;
       var _this$state4 = this.state,
           move = _this$state4.move,
           Posx = _this$state4.Posx,
@@ -334,7 +329,7 @@ function (_Component) {
         onTouchStart: this.handleDown,
         onTouchMove: this.handleMove,
         onTouchEnd: this.handleUp,
-        "data-num": this.props.num
+        "data-num": num
       }, _react.default.createElement("div", {
         style: shadow
       }, children));

@@ -48,20 +48,20 @@ function (_Component) {
     _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "renderChildren", function () {
       var children = _this.props.children;
 
-      var arr = _this.createChildren(children);
+      var allChildren = _this.createChildren(children);
 
-      var displayChildren = []; // only adds maxElement children only
+      var displayChildren = [];
+      var activeCardIndex = allChildren.length - 1; // only adds maxElement children only, default is 3
 
-      displayChildren = arr.slice(children.length - _this.state.maxElement, children.length);
+      displayChildren = allChildren.slice(children.length - _this.state.maxElement, children.length);
       displayChildren[displayChildren.length - 1] = _react.default.cloneElement(displayChildren[displayChildren.length - 1], {
         ref: _this.child
       });
 
       _this.setState({
-        arr: arr,
-        children: children,
+        allChildren: allChildren,
         displayChildren: displayChildren,
-        activeCard: arr.length - 1
+        activeCardIndex: activeCardIndex
       });
     });
 
@@ -80,10 +80,10 @@ function (_Component) {
     });
 
     _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "updateActive", function () {
-      var activeCard = _this.state.activeCard;
+      var activeCardIndex = _this.state.activeCardIndex;
 
       _this.setState({
-        activeCard: activeCard - 1
+        activeCardIndex: activeCardIndex - 1
       });
     });
 
@@ -97,14 +97,14 @@ function (_Component) {
 
     _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "updateChildren", function () {
       var _this$state = _this.state,
-          arr = _this$state.arr,
+          allChildren = _this$state.allChildren,
           maxElement = _this$state.maxElement,
           displayChildren = _this$state.displayChildren;
       maxElement += 1;
       displayChildren.pop();
 
       if (_this.props.children.length >= maxElement) {
-        displayChildren.unshift(arr[_this.props.children.length - maxElement]);
+        displayChildren.unshift(allChildren[_this.props.children.length - maxElement]);
         displayChildren[displayChildren.length - 1] = _react.default.cloneElement(displayChildren[displayChildren.length - 1], {
           ref: _this.child
         });
@@ -128,14 +128,14 @@ function (_Component) {
     });
 
     _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "handleTrigger", function (direction) {
-      _this.child.current.trigger(_this.state.activeCard, direction);
+      _this.child.current.trigger(direction);
     });
 
     _this.state = {
-      arr: [],
+      allChildren: [],
       displayChildren: [],
       maxElement: _this.props.max,
-      activeCard: 0
+      activeCardIndex: 0
     };
     _this.child = _react.default.createRef();
     return _this;
@@ -198,7 +198,7 @@ ReContainer.defaultProps = {
   mass: 0.7,
   damping: 0.8,
   trigger: false,
-  max: 5,
+  max: 3,
   onSwipe: undefined
 };
 var _default = ReContainer;

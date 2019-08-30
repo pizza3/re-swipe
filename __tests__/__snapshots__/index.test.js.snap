@@ -1,61 +1,214 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`<ReContainer/> Creates basic snapshot 1`] = `
-<div
-  style={
-    Object {
-      "height": "100vh",
-      "position": "relative",
-      "width": "100%",
+<MountApp>
+  <div
+    style={
+      Object {
+        "height": "100vh",
+        "position": "relative",
+        "width": "100%",
+      }
     }
-  }
->
-  <ReContainer
-    damping={0.8}
-    mass={0.7}
-    max={5}
-    trigger={false}
   >
-    <ReCard
-      height={400}
-      key="0"
-      metaData={Object {}}
-      width={300}
+    <ReContainer
+      damping={0.8}
+      mass={0.7}
+      max={3}
+      trigger={false}
     >
-      1
-    </ReCard>
-    <ReCard
-      height={400}
-      key="1"
-      metaData={Object {}}
-      width={300}
-    >
-      2
-    </ReCard>
-    <ReCard
-      height={400}
-      key="2"
-      metaData={Object {}}
-      width={300}
-    >
-      3
-    </ReCard>
-    <ReCard
-      height={400}
-      key="3"
-      metaData={Object {}}
-      width={300}
-    >
-      4
-    </ReCard>
-    <ReCard
-      height={400}
-      key="4"
-      metaData={Object {}}
-      width={300}
-    >
-      5
-    </ReCard>
-  </ReContainer>
-</div>
+      <div
+        style={
+          Object {
+            "height": "100%",
+            "overflow": "hidden",
+            "position": "relative",
+            "width": "100%",
+          }
+        }
+      >
+        <ReCard
+          damping={0.8}
+          handleOnSwipe={[Function]}
+          height={400}
+          key="2"
+          mass={0.7}
+          metaData={Object {}}
+          num={2}
+          updateActive={[Function]}
+          updateChildren={[Function]}
+          width={300}
+        >
+          <div
+            data-num={2}
+            onMouseDown={[Function]}
+            onMouseLeave={[Function]}
+            onMouseMove={[Function]}
+            onMouseUp={[Function]}
+            onTouchEnd={[Function]}
+            onTouchMove={[Function]}
+            onTouchStart={[Function]}
+            style={
+              Object {
+                "borderRadius": "18px",
+                "bottom": "0",
+                "boxSizing": "border-box",
+                "height": "400px",
+                "left": "0px",
+                "marginBottom": "auto",
+                "marginLeft": "auto",
+                "marginRight": "auto",
+                "marginTop": "auto",
+                "position": "absolute",
+                "right": "0",
+                "top": "0px",
+                "touchAction": "none",
+                "transform": "translate(nullpx,nullpx) rotate(0deg) perspective(800px)",
+                "userSelect": "none",
+                "width": "300px",
+              }
+            }
+          >
+            <div
+              style={
+                Object {
+                  "background": "#eeeeee",
+                  "borderRadius": "18px",
+                  "boxShadow": "0px 0px 31px -9px rgba(0,0,0,0.0)",
+                  "height": "400px",
+                  "position": "absolute",
+                  "transform": "scale(1)",
+                  "transition": " 0.4s cubic-bezier(0.19, 1, 0.22, 1)",
+                  "width": "300px",
+                }
+              }
+            >
+              3
+            </div>
+          </div>
+        </ReCard>
+        <ReCard
+          damping={0.8}
+          handleOnSwipe={[Function]}
+          height={400}
+          key="3"
+          mass={0.7}
+          metaData={Object {}}
+          num={3}
+          updateActive={[Function]}
+          updateChildren={[Function]}
+          width={300}
+        >
+          <div
+            data-num={3}
+            onMouseDown={[Function]}
+            onMouseLeave={[Function]}
+            onMouseMove={[Function]}
+            onMouseUp={[Function]}
+            onTouchEnd={[Function]}
+            onTouchMove={[Function]}
+            onTouchStart={[Function]}
+            style={
+              Object {
+                "borderRadius": "18px",
+                "bottom": "0",
+                "boxSizing": "border-box",
+                "height": "400px",
+                "left": "0px",
+                "marginBottom": "auto",
+                "marginLeft": "auto",
+                "marginRight": "auto",
+                "marginTop": "auto",
+                "position": "absolute",
+                "right": "0",
+                "top": "0px",
+                "touchAction": "none",
+                "transform": "translate(nullpx,nullpx) rotate(0deg) perspective(800px)",
+                "userSelect": "none",
+                "width": "300px",
+              }
+            }
+          >
+            <div
+              style={
+                Object {
+                  "background": "#eeeeee",
+                  "borderRadius": "18px",
+                  "boxShadow": "0px 0px 31px -9px rgba(0,0,0,0.0)",
+                  "height": "400px",
+                  "position": "absolute",
+                  "transform": "scale(1)",
+                  "transition": " 0.4s cubic-bezier(0.19, 1, 0.22, 1)",
+                  "width": "300px",
+                }
+              }
+            >
+              4
+            </div>
+          </div>
+        </ReCard>
+        <ReCard
+          damping={0.8}
+          handleOnSwipe={[Function]}
+          height={400}
+          key="4"
+          mass={0.7}
+          metaData={Object {}}
+          num={4}
+          updateActive={[Function]}
+          updateChildren={[Function]}
+          width={300}
+        >
+          <div
+            data-num={4}
+            onMouseDown={[Function]}
+            onMouseLeave={[Function]}
+            onMouseMove={[Function]}
+            onMouseUp={[Function]}
+            onTouchEnd={[Function]}
+            onTouchMove={[Function]}
+            onTouchStart={[Function]}
+            style={
+              Object {
+                "borderRadius": "18px",
+                "bottom": "0",
+                "boxSizing": "border-box",
+                "height": "400px",
+                "left": "0px",
+                "marginBottom": "auto",
+                "marginLeft": "auto",
+                "marginRight": "auto",
+                "marginTop": "auto",
+                "position": "absolute",
+                "right": "0",
+                "top": "0px",
+                "touchAction": "none",
+                "transform": "translate(nullpx,nullpx) rotate(0deg) perspective(800px)",
+                "userSelect": "none",
+                "width": "300px",
+              }
+            }
+          >
+            <div
+              style={
+                Object {
+                  "background": "#eeeeee",
+                  "borderRadius": "18px",
+                  "boxShadow": "0px 0px 31px -9px rgba(0,0,0,0.0)",
+                  "height": "400px",
+                  "position": "absolute",
+                  "transform": "scale(1)",
+                  "transition": " 0.4s cubic-bezier(0.19, 1, 0.22, 1)",
+                  "width": "300px",
+                }
+              }
+            >
+              5
+            </div>
+          </div>
+        </ReCard>
+      </div>
+    </ReContainer>
+  </div>
+</MountApp>
 `;

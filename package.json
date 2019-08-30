@@ -1,10 +1,11 @@
 {
     "name": "re-cardswipe",
-    "version": "0.0.3",
+    "version": "0.0.4",
     "description": "",
     "main": "build/index.js",
     "scripts": {
-		"test": "jest",
+        "test": "jest",
+        "test:watch":"jest --watch",
         "lib": "babel src/lib -d build --copy-files",
         "lib:watch": "babel src/lib -w -d build --copy-files"
     },
