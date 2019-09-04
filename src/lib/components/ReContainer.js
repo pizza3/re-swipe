@@ -18,15 +18,19 @@ class ReContainer extends Component {
 
   renderChildren = () => {
     const { children } = this.props;
+    const { maxElement } = this.state
     const allChildren = this.createChildren(children);
     let displayChildren = [];
-    let activeCardIndex = allChildren.length-1
+    let activeCardIndex = allChildren.length - 1;
     // only adds maxElement children only, default is 3
     displayChildren = allChildren.slice(
-      children.length - this.state.maxElement,
+      children.length - maxElement,
       children.length
     );
-    displayChildren[displayChildren.length-1] = React.cloneElement(displayChildren[displayChildren.length-1], {ref:this.child}) 
+    displayChildren[displayChildren.length - 1] = React.cloneElement(
+      displayChildren[displayChildren.length - 1],
+      { ref: this.child }
+    );
     this.setState({
       allChildren,
       displayChildren,
@@ -50,11 +54,11 @@ class ReContainer extends Component {
   };
 
   updateActive = () => {
-    const { activeCardIndex } = this.state    
+    const { activeCardIndex } = this.state;
     this.setState({
-      activeCardIndex:activeCardIndex-1
-    })
-  }
+      activeCardIndex: activeCardIndex - 1
+    });
+  };
 
   handleOnSwipe = (swipeDirection, metaData) => {
     const { onSwipe } = this.props;
@@ -64,33 +68,33 @@ class ReContainer extends Component {
   };
 
   updateChildren = () => {
-    let { allChildren, maxElement, displayChildren } = this.state;
-    maxElement += 1;
-    displayChildren.pop();
-    if (this.props.children.length >= maxElement) {
-      displayChildren.unshift(allChildren[this.props.children.length - maxElement]);
-      displayChildren[displayChildren.length-1] = React.cloneElement(displayChildren[displayChildren.length-1], {ref:this.child})       
-      this.setState({
-        displayChildren,
-        maxElement
-      });
-    } else {
-      if(displayChildren.length){
-        displayChildren[displayChildren.length-1] = React.cloneElement(displayChildren[displayChildren.length-1], {ref:this.child})       
-      }
-      this.setState({
-        displayChildren,
-        maxElement
-      });
+    const { allChildren, maxElement, displayChildren } = this.state;
+    const { children } = this.props;
+    const newMaxElement = maxElement + 1;
+    let newDisplayChildren = displayChildren;
+    newDisplayChildren.pop(); // remove the card on top
+    let lastChild = newDisplayChildren[newDisplayChildren.length - 1]  // get the 2nd last card from top
+    if (children.length >= newMaxElement) {
+      newDisplayChildren.unshift(allChildren[children.length - newMaxElement]); // add card on bottom
     }
-  }
+    if (newDisplayChildren.length) {
+      lastChild = React.cloneElement(
+        lastChild,
+        { ref: this.child }
+      );
+    }
+    this.setState({
+      displayChildren: newDisplayChildren,
+      maxElement: newMaxElement
+    });
+  };
 
-  handleTrigger = (direction) => {            
-    this.child.current.trigger(direction)
-  }
+  handleTrigger = direction => {
+    this.child.current.trigger(direction);
+  };
 
   render() {
-    const { trigger } = this.props
+    const { trigger } = this.props;
     const style = {
       position: "relative",
       width: "100%",
@@ -107,21 +111,32 @@ class ReContainer extends Component {
       bottom: "50px"
     };
     const defaultIcon = {
-      border: 'none',
-      background:'transparent'
+      border: "none",
+      background: "transparent"
     };
     return (
       <>
-        <div style={style}>
-          {this.state.displayChildren}
-        </div>
-        {trigger?
+        <div style={style}>{this.state.displayChildren}</div>
+        {trigger ? (
           <span style={iconContainer}>
-            <button style={defaultIcon} onClick={()=>{this.handleTrigger('left')}}>{Cross()}</button>
-            <button style={{...defaultIcon,float:'right'}} onClick={()=>{this.handleTrigger('right')}}>{CheckMark()}</button>
+            <button
+              style={defaultIcon}
+              onClick={() => {
+                this.handleTrigger("left");
+              }}
+            >
+              {Cross()}
+            </button>
+            <button
+              style={{ ...defaultIcon, float: "right" }}
+              onClick={() => {
+                this.handleTrigger("right");
+              }}
+            >
+              {CheckMark()}
+            </button>
           </span>
-          :null
-        }
+        ) : null}
       </>
     );
   }

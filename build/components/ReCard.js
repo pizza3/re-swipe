@@ -113,10 +113,12 @@ function (_Component) {
             damping: damping,
             mouseCurrPosX: mouseCurrPosX,
             mouseCurrPosY: mouseCurrPosY
-          }); // checks if mouse pointer reached far right of the container
+          });
 
+          var isFarRight = mouseCurrPosX > width * 80 / 100 || left > width * 80 / 100;
+          var isFarLeft = mouseCurrPosX < width * 20 / 100 || right < width * 20 / 100; // checks if mouse pointer reached far right of the container
 
-          if (mouseCurrPosX > width * 80 / 100 || left > width * 80 / 100) {
+          if (isFarRight) {
             var restX, restY; // this implementation for rest position x is still a hacky logic, not solid enough!
 
             restX = parentElement.offsetWidth / 2 + _this.props.height;
@@ -134,7 +136,7 @@ function (_Component) {
               triggerDown: false
             });
           } // checks if mouse pointer reached far left of the container
-          else if (mouseCurrPosX < width * 20 / 100 || right < width * 20 / 100) {
+          else if (isFarLeft) {
               var _restX, _restY;
 
               _restX = -parentElement.offsetWidth / 2 - _this.props.height;
@@ -193,9 +195,10 @@ function (_Component) {
           restX = _this$state3.restX,
           restY = _this$state3.restY,
           mass = _this$state3.mass,
-          damping = _this$state3.damping;
+          damping = _this$state3.damping,
+          move = _this$state3.move;
 
-      if (!_this.state.move) {
+      if (!move) {
         // calculate the total force using spring constant f=-kx
         _this.f.x = -k * (Posx - restX);
         _this.f.y = -k * (Posy - restY); // use force to determine the acceleration
@@ -227,7 +230,7 @@ function (_Component) {
       var active = _this.state.active;
       var isRight = left > offsetWidth;
       var isLeft = right < 0;
-      var swipeDirection = isLeft ? "left" : "right"; // stop the raf loop and unmount the card from the container    
+      var swipeDirection = isLeft ? "left" : "right"; // stop the raf loop and unmount the card from the container
 
       if (isLeft || isRight) {
         cancelAnimationFrame(_this._frameId);
@@ -262,7 +265,8 @@ function (_Component) {
       restY: 0,
       mass: _this.props.mass,
       damping: _this.props.damping
-    };
+    }; // setting initial force, acceleration & velocity
+
     _this.f = {
       x: 0,
       y: 0

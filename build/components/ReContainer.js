@@ -47,13 +47,14 @@ function (_Component) {
 
     _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "renderChildren", function () {
       var children = _this.props.children;
+      var maxElement = _this.state.maxElement;
 
       var allChildren = _this.createChildren(children);
 
       var displayChildren = [];
       var activeCardIndex = allChildren.length - 1; // only adds maxElement children only, default is 3
 
-      displayChildren = allChildren.slice(children.length - _this.state.maxElement, children.length);
+      displayChildren = allChildren.slice(children.length - maxElement, children.length);
       displayChildren[displayChildren.length - 1] = _react.default.cloneElement(displayChildren[displayChildren.length - 1], {
         ref: _this.child
       });
@@ -100,31 +101,27 @@ function (_Component) {
           allChildren = _this$state.allChildren,
           maxElement = _this$state.maxElement,
           displayChildren = _this$state.displayChildren;
-      maxElement += 1;
-      displayChildren.pop();
+      var children = _this.props.children;
+      var newMaxElement = maxElement + 1;
+      var newDisplayChildren = displayChildren;
+      newDisplayChildren.pop(); // remove the card on top
 
-      if (_this.props.children.length >= maxElement) {
-        displayChildren.unshift(allChildren[_this.props.children.length - maxElement]);
-        displayChildren[displayChildren.length - 1] = _react.default.cloneElement(displayChildren[displayChildren.length - 1], {
+      var lastChild = newDisplayChildren[newDisplayChildren.length - 1]; // get the 2nd last card from top
+
+      if (children.length >= newMaxElement) {
+        newDisplayChildren.unshift(allChildren[children.length - newMaxElement]); // add card on bottom
+      }
+
+      if (newDisplayChildren.length) {
+        lastChild = _react.default.cloneElement(lastChild, {
           ref: _this.child
         });
-
-        _this.setState({
-          displayChildren: displayChildren,
-          maxElement: maxElement
-        });
-      } else {
-        if (displayChildren.length) {
-          displayChildren[displayChildren.length - 1] = _react.default.cloneElement(displayChildren[displayChildren.length - 1], {
-            ref: _this.child
-          });
-        }
-
-        _this.setState({
-          displayChildren: displayChildren,
-          maxElement: maxElement
-        });
       }
+
+      _this.setState({
+        displayChildren: newDisplayChildren,
+        maxElement: newMaxElement
+      });
     });
 
     _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "handleTrigger", function (direction) {
@@ -168,8 +165,8 @@ function (_Component) {
         bottom: "50px"
       };
       var defaultIcon = {
-        border: 'none',
-        background: 'transparent'
+        border: "none",
+        background: "transparent"
       };
       return _react.default.createElement(_react.default.Fragment, null, _react.default.createElement("div", {
         style: style
@@ -178,14 +175,14 @@ function (_Component) {
       }, _react.default.createElement("button", {
         style: defaultIcon,
         onClick: function onClick() {
-          _this2.handleTrigger('left');
+          _this2.handleTrigger("left");
         }
       }, (0, _icon.Cross)()), _react.default.createElement("button", {
         style: _objectSpread({}, defaultIcon, {
-          float: 'right'
+          float: "right"
         }),
         onClick: function onClick() {
-          _this2.handleTrigger('right');
+          _this2.handleTrigger("right");
         }
       }, (0, _icon.CheckMark)())) : null);
     }

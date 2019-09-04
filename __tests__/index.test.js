@@ -44,5 +44,7 @@ describe("<ReContainer/>", () => {
 		expect(instance.state.allChildren.length).toEqual(foo.length)
 		expect(instance.state.displayChildren.length).toEqual(2)
 		expect(instance.state.activeCardIndex).toEqual(foo.length - 1)
-	});
+  });
+  
+  
 });

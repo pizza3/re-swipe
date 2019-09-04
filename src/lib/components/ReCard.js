@@ -29,6 +29,7 @@ class ReCard extends Component {
       mass: this.props.mass,
       damping: this.props.damping
     };
+    // setting initial force, acceleration & velocity
     this.f = { x: 0, y: 0 };
     this.a = { x: 0, y: 0 };
     this.v = { x: 0, y: 0 };
@@ -93,8 +94,13 @@ class ReCard extends Component {
           mouseCurrPosY
         });
 
+        let isFarRight =
+          mouseCurrPosX > (width * 80) / 100 || left > (width * 80) / 100;
+        let isFarLeft =
+          mouseCurrPosX < (width * 20) / 100 || right < (width * 20) / 100;
+
         // checks if mouse pointer reached far right of the container
-        if (mouseCurrPosX > (width * 80) / 100 || left > (width * 80) / 100) {
+        if (isFarRight) {
           let restX, restY;
           // this implementation for rest position x is still a hacky logic, not solid enough!
           restX = parentElement.offsetWidth / 2 + this.props.height;
@@ -112,10 +118,7 @@ class ReCard extends Component {
           });
         }
         // checks if mouse pointer reached far left of the container
-        else if (
-          mouseCurrPosX < (width * 20) / 100 ||
-          right < (width * 20) / 100
-        ) {
+        else if (isFarLeft) {
           let restX, restY;
           restX = -parentElement.offsetWidth / 2 - this.props.height;
           restY = this.state.Posy * 5;
@@ -139,7 +142,7 @@ class ReCard extends Component {
       move: false
     });
   };
-  trigger = direction => {    
+  trigger = direction => {
     const { active } = this.state;
     const { parentElement } = this.Ref.current;
     if (!active) this.animate();
@@ -164,8 +167,8 @@ class ReCard extends Component {
     });
   };
   updateCard = () => {
-    const { k, Posx, Posy, restX, restY, mass, damping } = this.state;
-    if (!this.state.move) {
+    const { k, Posx, Posy, restX, restY, mass, damping, move } = this.state;
+    if (!move) {
       // calculate the total force using spring constant f=-kx
       this.f.x = -k * (Posx - restX);
       this.f.y = -k * (Posy - restY);
@@ -191,11 +194,11 @@ class ReCard extends Component {
       updateChildren,
       metaData
     } = this.props;
-    const { active } = this.state;    
+    const { active } = this.state;
     const isRight = left > offsetWidth;
     const isLeft = right < 0;
     const swipeDirection = isLeft ? "left" : "right";
-    // stop the raf loop and unmount the card from the container    
+    // stop the raf loop and unmount the card from the container
     if (isLeft || isRight) {
       cancelAnimationFrame(this._frameId);
       handleOnSwipe(swipeDirection, metaData || {});
@@ -204,11 +207,11 @@ class ReCard extends Component {
     } else {
       this._frameId = requestAnimationFrame(this.animate);
     }
-    if (active) {
+    if (active) {      
       this.updateCard();
     }
   };
-  render() {
+  render() {    
     const { children, width, height, num } = this.props;
     const { move, Posx, Posy } = this.state;
     const style = {
