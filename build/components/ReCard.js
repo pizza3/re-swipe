@@ -116,11 +116,11 @@ function (_Component) {
           });
 
           var isFarRight = mouseCurrPosX > width * 80 / 100 || left > width * 80 / 100;
-          var isFarLeft = mouseCurrPosX < width * 20 / 100 || right < width * 20 / 100; // checks if mouse pointer reached far right of the container
+          var isFarLeft = mouseCurrPosX < width * 20 / 100 || right < width * 20 / 100;
+          var restX, restY; // checks if mouse pointer reached far right of the container
 
           if (isFarRight) {
-            var restX, restY; // this implementation for rest position x is still a hacky logic, not solid enough!
-
+            // this implementation for rest position x is still a hacky logic, not solid enough!
             restX = parentElement.offsetWidth / 2 + _this.props.height;
             restY = _this.state.Posy * 5;
             var _limit = true;
@@ -137,17 +137,15 @@ function (_Component) {
             });
           } // checks if mouse pointer reached far left of the container
           else if (isFarLeft) {
-              var _restX, _restY;
-
-              _restX = -parentElement.offsetWidth / 2 - _this.props.height;
-              _restY = _this.state.Posy * 5;
+              restX = -parentElement.offsetWidth / 2 - _this.props.height;
+              restY = _this.state.Posy * 5;
               var _limit2 = true;
               var _move2 = false;
               var _damping2 = 0.15;
 
               _this.setState({
-                restX: _restX,
-                restY: _restY,
+                restX: restX,
+                restY: restY,
                 limit: _limit2,
                 move: _move2,
                 damping: _damping2,

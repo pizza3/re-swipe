@@ -98,10 +98,10 @@ class ReCard extends Component {
           mouseCurrPosX > (width * 80) / 100 || left > (width * 80) / 100;
         let isFarLeft =
           mouseCurrPosX < (width * 20) / 100 || right < (width * 20) / 100;
+        let restX, restY;
 
         // checks if mouse pointer reached far right of the container
         if (isFarRight) {
-          let restX, restY;
           // this implementation for rest position x is still a hacky logic, not solid enough!
           restX = parentElement.offsetWidth / 2 + this.props.height;
           restY = this.state.Posy * 5;
@@ -119,7 +119,6 @@ class ReCard extends Component {
         }
         // checks if mouse pointer reached far left of the container
         else if (isFarLeft) {
-          let restX, restY;
           restX = -parentElement.offsetWidth / 2 - this.props.height;
           restY = this.state.Posy * 5;
           let limit = true;
@@ -197,7 +196,7 @@ class ReCard extends Component {
     const { active } = this.state;
     const isRight = left > offsetWidth;
     const isLeft = right < 0;
-    const swipeDirection = isLeft ? "left" : "right";
+    const swipeDirection = isLeft ? "left" : "right";    
     // stop the raf loop and unmount the card from the container
     if (isLeft || isRight) {
       cancelAnimationFrame(this._frameId);
