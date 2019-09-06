@@ -45,6 +45,30 @@ describe("<ReContainer/>", () => {
 		expect(instance.state.displayChildren.length).toEqual(2)
 		expect(instance.state.activeCardIndex).toEqual(foo.length - 1)
   });
-  
-  
+  it('Checks internal methods',()=>{
+    const mockCallback = jest.fn((dir,data)=>{});
+    const component = mount(
+			<ReContainer
+      onSwipe={mockCallback}
+      >
+				{foo.map((value, index) => (
+					<ReCard key={index}>{value}</ReCard>
+				))}
+			</ReContainer>
+    )
+    const instance = component.instance()
+    // update updateActive() updateChildren()
+    expect(instance.state.activeCardIndex).toEqual(foo.length - 1)
+    expect(instance.state.maxElement).toEqual(3)
+    expect(instance.state.displayChildren.length).toEqual(3)
+    instance.updateActive()
+    instance.updateChildren()   
+    instance.handleOnSwipe("left",{})    
+    expect(instance.state.activeCardIndex).toEqual(foo.length - 2)
+    expect(instance.state.maxElement).toEqual(4)
+    expect(instance.state.displayChildren.length).toEqual(3)
+    expect(mockCallback.mock.calls.length).toBe(1);
+    expect(mockCallback.mock.calls[0][0]).toBe("left");
+    expect(mockCallback.mock.calls[0][1]).toEqual({});
+  })
 });
