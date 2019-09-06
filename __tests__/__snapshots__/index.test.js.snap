@@ -5,9 +5,9 @@ exports[`<ReContainer/> Creates basic snapshot 1`] = `
   <div
     style={
       Object {
-        "height": "100vh",
+        "height": "900px",
         "position": "relative",
-        "width": "100%",
+        "width": "900px",
       }
     }
   >

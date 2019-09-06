@@ -39,7 +39,6 @@ class ReCard extends Component {
     e.stopPropagation();
     e.preventDefault();
     e.persist();
-    console.log(e.clientX)
     const { active, triggerDown } = this.state;
     if (triggerDown) {
       if (!active) {

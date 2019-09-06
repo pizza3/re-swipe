@@ -10,8 +10,8 @@ configure({
 const foo = [1, 2, 3, 4, 5];
 const parentStyle = {
   position: "relative",
-  width: "100%",
-  height: "100vh"
+  width: "900px",
+  height: "900px"
 };
 const MountApp = () => {
   // NOTE: it is important to enclose <ReContainer/> component inside a parent div, being an absolute container it will inherit the parent dimensions (width & height).
@@ -82,6 +82,10 @@ describe("<ReCard/>", () => {
     </div>
   );
 
+  const mouseDownEvent = {
+    clientX: 450,
+    clientY: 450
+  }
   it("Checks internal methods", () => {
     const card = component.find(ReCard);
     const instance = card.instance();
@@ -90,8 +94,10 @@ describe("<ReCard/>", () => {
     card
       .find("div")
       .at(0)
-      .simulate("mousedown");
+      .simulate("mousedown",mouseDownEvent);
     expect(instance.state.active).toEqual(true);
     expect(instance.state.move).toEqual(true);
+    expect(instance.state.mouseStartPosX).toEqual(450);
+    expect(instance.state.mouseStartPosY).toEqual(450);
   });
 });
