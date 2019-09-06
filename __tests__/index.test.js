@@ -9,9 +9,9 @@ configure({
 
 const foo = [1, 2, 3, 4, 5];
 const parentStyle = {
-	position: "relative",
-	width: "100%",
-	height: "100vh"
+  position: "relative",
+  width: "100%",
+  height: "100vh"
 };
 const MountApp = () => {
   // NOTE: it is important to enclose <ReContainer/> component inside a parent div, being an absolute container it will inherit the parent dimensions (width & height).
@@ -33,42 +33,65 @@ describe("<ReContainer/>", () => {
     expect(toJson(wrapper)).toMatchSnapshot();
   });
   it("Checks the state after initial render", () => {
-		const component = shallow(
-			<ReContainer max={2}>
-				{foo.map((value, index) => (
-					<ReCard key={index}>{value}</ReCard>
-				))}
-			</ReContainer>
-		)
-		const instance = component.instance()
-		expect(instance.state.allChildren.length).toEqual(foo.length)
-		expect(instance.state.displayChildren.length).toEqual(2)
-		expect(instance.state.activeCardIndex).toEqual(foo.length - 1)
+    const component = shallow(
+      <ReContainer max={2}>
+        {foo.map((value, index) => (
+          <ReCard key={index}>{value}</ReCard>
+        ))}
+      </ReContainer>
+    );
+    const instance = component.instance();
+    expect(instance.state.allChildren.length).toEqual(foo.length);
+    expect(instance.state.displayChildren.length).toEqual(2);
+    expect(instance.state.activeCardIndex).toEqual(foo.length - 1);
   });
-  it('Checks internal methods',()=>{
-    const mockCallback = jest.fn((dir,data)=>{});
+  it("Checks internal methods", () => {
+    const mockCallback = jest.fn((dir, data) => {});
     const component = mount(
-			<ReContainer
-      onSwipe={mockCallback}
-      >
-				{foo.map((value, index) => (
-					<ReCard key={index}>{value}</ReCard>
-				))}
-			</ReContainer>
-    )
-    const instance = component.instance()
+      <ReContainer onSwipe={mockCallback}>
+        {foo.map((value, index) => (
+          <ReCard key={index}>{value}</ReCard>
+        ))}
+      </ReContainer>
+    );
+    const instance = component.instance();
     // update updateActive() updateChildren()
-    expect(instance.state.activeCardIndex).toEqual(foo.length - 1)
-    expect(instance.state.maxElement).toEqual(3)
-    expect(instance.state.displayChildren.length).toEqual(3)
-    instance.updateActive()
-    instance.updateChildren()   
-    instance.handleOnSwipe("left",{})    
-    expect(instance.state.activeCardIndex).toEqual(foo.length - 2)
-    expect(instance.state.maxElement).toEqual(4)
-    expect(instance.state.displayChildren.length).toEqual(3)
+    expect(instance.state.activeCardIndex).toEqual(foo.length - 1);
+    expect(instance.state.maxElement).toEqual(3);
+    expect(instance.state.displayChildren.length).toEqual(3);
+    instance.updateActive();
+    instance.updateChildren();
+    instance.handleOnSwipe("left", {});
+    expect(instance.state.activeCardIndex).toEqual(foo.length - 2);
+    expect(instance.state.maxElement).toEqual(4);
+    expect(instance.state.displayChildren.length).toEqual(3);
     expect(mockCallback.mock.calls.length).toBe(1);
     expect(mockCallback.mock.calls[0][0]).toBe("left");
     expect(mockCallback.mock.calls[0][1]).toEqual({});
-  })
+  });
+});
+
+describe("<ReCard/>", () => {
+  const component = mount(
+    <div style={parentStyle}>
+      <ReContainer max={2}>
+        {[1].map((value, index) => (
+          <ReCard key={index}>{value}</ReCard>
+        ))}
+      </ReContainer>
+    </div>
+  );
+
+  it("Checks internal methods", () => {
+    const card = component.find(ReCard);
+    const instance = card.instance();
+    expect(instance.state.active).toEqual(false);
+    expect(instance.state.move).toEqual(false);
+    card
+      .find("div")
+      .at(0)
+      .simulate("mousedown");
+    expect(instance.state.active).toEqual(true);
+    expect(instance.state.move).toEqual(true);
+  });
 });

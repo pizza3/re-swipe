@@ -53,6 +53,7 @@ function (_Component) {
       e.stopPropagation();
       e.preventDefault();
       e.persist();
+      console.log(e.clientX);
       var _this$state = _this.state,
           active = _this$state.active,
           triggerDown = _this$state.triggerDown;
