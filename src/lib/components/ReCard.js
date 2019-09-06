@@ -73,13 +73,14 @@ class ReCard extends Component {
     const { parentElement } = this.Ref.current;
     if (!limit) {
       if (move) {
+        const width = parentElement.offsetWidth;
+        const magY = 2
         // assign current mouse position
         let mouseCurrPosX = e.touches ? e.touches[0].screenX : e.clientX;
         let mouseCurrPosY = e.touches ? e.touches[0].screenY : e.clientY;
         // distance between startPosition and newPosition
         let Posx = mouseCurrPosX - mouseStartPosX;
         let Posy = mouseCurrPosY - mouseStartPosY;
-        let width = parentElement.offsetWidth;
         let mouseRange = mouseCurrPosX;
         if (mouseRange < width / 2) {
           mouseRange = width - mouseRange;
@@ -91,7 +92,6 @@ class ReCard extends Component {
           0.6,
           0.8
         );
-
         this.setState({
           Posx,
           Posy,
@@ -99,18 +99,16 @@ class ReCard extends Component {
           mouseCurrPosX,
           mouseCurrPosY
         });
-
-        let isFarRight =
+        const isFarRight =
           mouseCurrPosX > (width * 80) / 100 || left > (width * 80) / 100;
-        let isFarLeft =
+        const isFarLeft =
           mouseCurrPosX < (width * 20) / 100 || right < (width * 20) / 100;
         let restX, restY;
-
+        restY = this.state.Posy * magY;
         // checks if mouse pointer reached far right of the container
         if (isFarRight) {
           // this implementation for rest position x is still a hacky logic, not solid enough!
           restX = parentElement.offsetWidth / 2 + this.props.height;
-          restY = this.state.Posy * 5;
           let limit = true;
           let move = false;
           let damping = 0.15;
@@ -126,7 +124,6 @@ class ReCard extends Component {
         // checks if mouse pointer reached far left of the container
         else if (isFarLeft) {
           restX = -parentElement.offsetWidth / 2 - this.props.height;
-          restY = this.state.Posy * 5;
           let limit = true;
           let move = false;
           let damping = 0.15;

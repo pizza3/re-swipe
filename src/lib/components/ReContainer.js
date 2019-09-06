@@ -73,13 +73,12 @@ class ReContainer extends Component {
     const newMaxElement = maxElement + 1;
     let newDisplayChildren = displayChildren;
     newDisplayChildren.pop(); // remove the card on top
-    let lastChild = newDisplayChildren[newDisplayChildren.length - 1]  // get the 2nd last card from top
     if (children.length >= newMaxElement) {
       newDisplayChildren.unshift(allChildren[children.length - newMaxElement]); // add card on bottom
     }
     if (newDisplayChildren.length) {
-      lastChild = React.cloneElement(
-        lastChild,
+      newDisplayChildren[newDisplayChildren.length - 1] = React.cloneElement(
+        newDisplayChildren[newDisplayChildren.length - 1],
         { ref: this.child }
       );
     }

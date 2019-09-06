@@ -106,14 +106,12 @@ function (_Component) {
       var newDisplayChildren = displayChildren;
       newDisplayChildren.pop(); // remove the card on top
 
-      var lastChild = newDisplayChildren[newDisplayChildren.length - 1]; // get the 2nd last card from top
-
       if (children.length >= newMaxElement) {
         newDisplayChildren.unshift(allChildren[children.length - newMaxElement]); // add card on bottom
       }
 
       if (newDisplayChildren.length) {
-        lastChild = _react.default.cloneElement(lastChild, {
+        newDisplayChildren[newDisplayChildren.length - 1] = _react.default.cloneElement(newDisplayChildren[newDisplayChildren.length - 1], {
           ref: _this.child
         });
       }

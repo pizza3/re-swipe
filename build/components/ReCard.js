@@ -90,7 +90,9 @@ function (_Component) {
 
       if (!limit) {
         if (move) {
-          // assign current mouse position
+          var width = parentElement.offsetWidth;
+          var magY = 2; // assign current mouse position
+
           var mouseCurrPosX = e.touches ? e.touches[0].screenX : e.clientX;
           var mouseCurrPosY = e.touches ? e.touches[0].screenY : e.clientY; // distance between startPosition and newPosition
 
@@ -98,7 +100,6 @@ function (_Component) {
 
           var _Posy = mouseCurrPosY - mouseStartPosY;
 
-          var width = parentElement.offsetWidth;
           var mouseRange = mouseCurrPosX;
 
           if (mouseRange < width / 2) {
@@ -117,12 +118,12 @@ function (_Component) {
 
           var isFarRight = mouseCurrPosX > width * 80 / 100 || left > width * 80 / 100;
           var isFarLeft = mouseCurrPosX < width * 20 / 100 || right < width * 20 / 100;
-          var restX, restY; // checks if mouse pointer reached far right of the container
+          var restX, restY;
+          restY = _this.state.Posy * magY; // checks if mouse pointer reached far right of the container
 
           if (isFarRight) {
             // this implementation for rest position x is still a hacky logic, not solid enough!
             restX = parentElement.offsetWidth / 2 + _this.props.height;
-            restY = _this.state.Posy * 5;
             var _limit = true;
             var _move = false;
             var _damping = 0.15;
@@ -138,7 +139,6 @@ function (_Component) {
           } // checks if mouse pointer reached far left of the container
           else if (isFarLeft) {
               restX = -parentElement.offsetWidth / 2 - _this.props.height;
-              restY = _this.state.Posy * 5;
               var _limit2 = true;
               var _move2 = false;
               var _damping2 = 0.15;
