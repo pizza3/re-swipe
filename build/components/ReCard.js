@@ -282,13 +282,25 @@ function (_Component) {
   }
 
   _createClass(ReCard, [{
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      var _this$props2 = this.props,
+          updateChildren = _this$props2.updateChildren,
+          handleOnSwipe = _this$props2.handleOnSwipe,
+          updateActive = _this$props2.updateActive;
+
+      if (!(updateChildren || handleOnSwipe || updateActive)) {
+        console.error('Enclose <ReCard/> component inside a <ReContainer/> component!!');
+      }
+    }
+  }, {
     key: "render",
     value: function render() {
-      var _this$props2 = this.props,
-          children = _this$props2.children,
-          width = _this$props2.width,
-          height = _this$props2.height,
-          num = _this$props2.num;
+      var _this$props3 = this.props,
+          children = _this$props3.children,
+          width = _this$props3.width,
+          height = _this$props3.height,
+          num = _this$props3.num;
       var _this$state4 = this.state,
           move = _this$state4.move,
           Posx = _this$state4.Posx,

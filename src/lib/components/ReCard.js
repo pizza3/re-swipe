@@ -35,6 +35,12 @@ class ReCard extends Component {
     this.v = { x: 0, y: 0 };
     this.Ref = React.createRef();
   }
+  componentDidMount(){
+    const { updateChildren, handleOnSwipe, updateActive } = this.props
+    if(!(updateChildren || handleOnSwipe || updateActive)){
+      console.error('Enclose <ReCard/> component inside a <ReContainer/> component!!')
+    }
+  }
   handleDown = e => {
     e.stopPropagation();
     e.preventDefault();

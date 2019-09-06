@@ -6,7 +6,10 @@ import ReContainer, { ReCard } from "../src/lib/index";
 configure({
   adapter: new Adapter()
 });
-
+global.console = {
+  error: jest.fn(),
+  log: jest.fn()
+}
 const foo = [1, 2, 3, 4, 5];
 const parentStyle = {
   position: "relative",
@@ -86,6 +89,12 @@ describe("<ReCard/>", () => {
     clientX: 450,
     clientY: 450
   }
+  it('Checks props after initial render',()=>{
+    const component = mount(
+      <ReCard>'1'</ReCard>
+    )
+    expect(global.console.error).toHaveBeenCalledWith('Enclose <ReCard/> component inside a <ReContainer/> component!!')
+  })
   it("Checks internal methods", () => {
     const card = component.find(ReCard);
     const instance = card.instance();
