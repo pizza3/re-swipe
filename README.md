@@ -78,7 +78,7 @@ render's 3 cards component for better animation and performace. Each
 used to return the state of the card when swiped towards left or swiped
 towards right.
 
-The `<ReContainer>` assign's the `offset` which is by default set to 10% of screen width, this `offset` will be used to check if the point of contact with a `<Card/>` component is under the offset area which will trigger the swipe mechanism.
+The `<ReContainer>` assign's the `offset` which is by default set to 10% of `<ReContainer>` width, this `offset` will be used to check if the point of contact with a `<Card/>` component is under the offset area which will trigger the swipe mechanism.
 
 <p align="center" >
   <img src="https://raw.githubusercontent.com/pizza3/asset/master/img1.png" height="auto" width="60%">
