@@ -53,8 +53,8 @@ class ReCard extends Component {
       this.setState({
         move: true,
         active: true,
-        mouseStartPosX: e.touches ? e.touches[0].screenX : e.clientX,
-        mouseStartPosY: e.touches ? e.touches[0].screenY : e.clientY
+        mouseStartPosX: e.touches ? e.touches[0].clientX : e.clientX,
+        mouseStartPosY: e.touches ? e.touches[0].clientY : e.clientY
       });
     }
   };
@@ -75,9 +75,9 @@ class ReCard extends Component {
       if (move) {
         const width = parentElement.offsetWidth;
         const magY = 2
-        // assign current mouse position
-        let mouseCurrPosX = e.touches ? e.touches[0].screenX : e.clientX;
-        let mouseCurrPosY = e.touches ? e.touches[0].screenY : e.clientY;
+        // assign current mouse/touch position
+        let mouseCurrPosX = e.touches ? e.touches[0].clientX : e.clientX;
+        let mouseCurrPosY = e.touches ? e.touches[0].clientY : e.clientY;
         // distance between startPosition and newPosition
         let Posx = mouseCurrPosX - mouseStartPosX;
         let Posy = mouseCurrPosY - mouseStartPosY;

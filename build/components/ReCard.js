@@ -65,8 +65,8 @@ function (_Component) {
         _this.setState({
           move: true,
           active: true,
-          mouseStartPosX: e.touches ? e.touches[0].screenX : e.clientX,
-          mouseStartPosY: e.touches ? e.touches[0].screenY : e.clientY
+          mouseStartPosX: e.touches ? e.touches[0].clientX : e.clientX,
+          mouseStartPosY: e.touches ? e.touches[0].clientY : e.clientY
         });
       }
     });
@@ -91,10 +91,10 @@ function (_Component) {
       if (!limit) {
         if (move) {
           var width = parentElement.offsetWidth;
-          var magY = 2; // assign current mouse position
+          var magY = 2; // assign current mouse/touch position
 
-          var mouseCurrPosX = e.touches ? e.touches[0].screenX : e.clientX;
-          var mouseCurrPosY = e.touches ? e.touches[0].screenY : e.clientY; // distance between startPosition and newPosition
+          var mouseCurrPosX = e.touches ? e.touches[0].clientX : e.clientX;
+          var mouseCurrPosY = e.touches ? e.touches[0].clientY : e.clientY; // distance between startPosition and newPosition
 
           var _Posx = mouseCurrPosX - mouseStartPosX;
 
