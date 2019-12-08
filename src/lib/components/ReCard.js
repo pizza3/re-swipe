@@ -145,28 +145,31 @@ class ReCard extends Component {
     });
   };
   trigger = direction => {
-    const { active } = this.state;
+    const { active,triggerDown } = this.state;
     const { parentElement } = this.Ref.current;
     if (!active) this.animate();
-    let restX =
+    if(triggerDown){
+      const restX =
       direction === "right"
         ? parentElement.offsetWidth * 5
         : -parentElement.offsetWidth * 5;
-    let restY = getRandomInt(parentElement.offsetHeight);
-    let limit = true;
-    let move = false;
-    let damping = 0.02;
-    this.setState({
-      move: true,
-      active: true,
-      mouseStartPosX: parentElement.offsetWidth / 2,
-      mouseStartPosY: parentElement.offsetHeight / 2,
-      restX,
-      restY,
-      limit,
-      move,
-      damping
-    });
+      const restY = getRandomInt(parentElement.offsetHeight);
+      const limit = true;
+      const move = false;
+      const damping = 0.02;
+      this.setState({
+        move: true,
+        active: true,
+        mouseStartPosX: parentElement.offsetWidth / 2,
+        mouseStartPosY: parentElement.offsetHeight / 2,
+        restX,
+        restY,
+        limit,
+        move,
+        damping,
+        triggerDown: false
+      });
+    }
   };
   updateCard = () => {
     const { k, Posx, Posy, restX, restY, mass, damping, move } = this.state;

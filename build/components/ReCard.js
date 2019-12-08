@@ -163,38 +163,43 @@ function (_Component) {
     });
 
     _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "trigger", function (direction) {
-      var _this$setState;
-
-      var active = _this.state.active;
+      var _this$state3 = _this.state,
+          active = _this$state3.active,
+          triggerDown = _this$state3.triggerDown;
       var parentElement = _this.Ref.current.parentElement;
       if (!active) _this.animate();
-      var restX = direction === "right" ? parentElement.offsetWidth * 5 : -parentElement.offsetWidth * 5;
-      var restY = getRandomInt(parentElement.offsetHeight);
-      var limit = true;
-      var move = false;
-      var damping = 0.02;
 
-      _this.setState((_this$setState = {
-        move: true,
-        active: true,
-        mouseStartPosX: parentElement.offsetWidth / 2,
-        mouseStartPosY: parentElement.offsetHeight / 2,
-        restX: restX,
-        restY: restY,
-        limit: limit
-      }, _defineProperty(_this$setState, "move", move), _defineProperty(_this$setState, "damping", damping), _this$setState));
+      if (triggerDown) {
+        var _this$setState;
+
+        var restX = direction === "right" ? parentElement.offsetWidth * 5 : -parentElement.offsetWidth * 5;
+        var restY = getRandomInt(parentElement.offsetHeight);
+        var limit = true;
+        var move = false;
+        var damping = 0.02;
+
+        _this.setState((_this$setState = {
+          move: true,
+          active: true,
+          mouseStartPosX: parentElement.offsetWidth / 2,
+          mouseStartPosY: parentElement.offsetHeight / 2,
+          restX: restX,
+          restY: restY,
+          limit: limit
+        }, _defineProperty(_this$setState, "move", move), _defineProperty(_this$setState, "damping", damping), _defineProperty(_this$setState, "triggerDown", false), _this$setState));
+      }
     });
 
     _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "updateCard", function () {
-      var _this$state3 = _this.state,
-          k = _this$state3.k,
-          Posx = _this$state3.Posx,
-          Posy = _this$state3.Posy,
-          restX = _this$state3.restX,
-          restY = _this$state3.restY,
-          mass = _this$state3.mass,
-          damping = _this$state3.damping,
-          move = _this$state3.move;
+      var _this$state4 = _this.state,
+          k = _this$state4.k,
+          Posx = _this$state4.Posx,
+          Posy = _this$state4.Posy,
+          restX = _this$state4.restX,
+          restY = _this$state4.restY,
+          mass = _this$state4.mass,
+          damping = _this$state4.damping,
+          move = _this$state4.move;
 
       if (!move) {
         // calculate the total force using spring constant f=-kx
@@ -301,10 +306,10 @@ function (_Component) {
           width = _this$props3.width,
           height = _this$props3.height,
           num = _this$props3.num;
-      var _this$state4 = this.state,
-          move = _this$state4.move,
-          Posx = _this$state4.Posx,
-          Posy = _this$state4.Posy;
+      var _this$state5 = this.state,
+          move = _this$state5.move,
+          Posx = _this$state5.Posx,
+          Posy = _this$state5.Posy;
       var style = {
         position: "absolute",
         left: "0px",
