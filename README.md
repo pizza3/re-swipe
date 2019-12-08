@@ -1,6 +1,7 @@
 # re-cardswipe
 
 [![Build Status](https://travis-ci.org/pizza3/re-swipe.svg?branch=master)](https://travis-ci.org/pizza3/re-swipe)
+![status](https://img.shields.io/badge/version-0.0.6-brightgreen.svg)
 
 re-cardswipe is a react component library emulating the UI card swipe as seen on applications such as tinder, this library provides the state track for each card, controls for physics of animation, dynamic trigger, and other feature's.
 
