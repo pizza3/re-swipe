@@ -208,9 +208,9 @@ class ReCard extends Component {
       updateChildren();
     } else {
       this._frameId = requestAnimationFrame(this.animate);
-    }
-    if (active) {      
-      this.updateCard();
+      if (active) {      
+        this.updateCard();
+      }
     }
   };
   render() {    

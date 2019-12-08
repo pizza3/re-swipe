@@ -237,10 +237,10 @@ function (_Component) {
         updateChildren();
       } else {
         _this._frameId = requestAnimationFrame(_this.animate);
-      }
 
-      if (active) {
-        _this.updateCard();
+        if (active) {
+          _this.updateCard();
+        }
       }
     });
 
