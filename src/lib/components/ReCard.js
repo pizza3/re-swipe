@@ -59,6 +59,7 @@ class ReCard extends Component {
     }
   };
   handleMove = e => {
+    e.stopPropagation();
     e.preventDefault();
     e.persist();
     const {
@@ -139,7 +140,9 @@ class ReCard extends Component {
       }
     }
   };
-  handleUp = () => {
+  handleUp = (e) => {
+    e.stopPropagation();
+    e.preventDefault();
     this.setState({
       move: false
     });
